@@ -1,0 +1,253 @@
+scorevideo LOG
+File:  log.mat
+
+VIDEO FILE SET
+Videotype:  WMV
+Directory:  Z:\FAKE_DIRECTORY\Nonsense\
+Video file set:
+   9 1-54001
+Play duration (min):  30.001
+Frames/sec of files:  30
+No. of subjects:  2
+
+COMMAND SET AND SETTINGS
+-------------------------------
+start|stop|subject|description
+-------------------------------
+A             0      Lead Swim at female
+C             0      Chase female
+D             0      Lateral display at female
+F             0      Flee from female
+H             0      Bad quiver at female
+I             0      Bad lead swim at female
+J             0      Bad lateral display at female
+N      G      0      Spawning
+Q             0      Quiver at female 
+R             0      Rostral display at female
+S             0      Bite female
+a             0      Lead swim at male
+b             0      Lead swim at ambigous
+c             0      chase male
+d             0      Lateral display at male
+e             0      Pot entry
+f             0      Flee from male
+h             0      Bad quiver at male
+i             0      Bad lead swim at male
+j             0      Bad lateral display at male
+l             0      Male follows male into pot
+m             0      Lateral display at ambiguous
+p             0      Dig
+q             0      Quiver at male
+r             0      Rostral display at male
+s             0      Bite male
+t             0      Victim of male biting
+x             0      Pot entry exit
+y             0      Yawn
+z             0      Quiver at ambigous
+-------------------------------
+subject 1:  subject1
+subject 2:  subject2
+subj#:  0=either  1=subject1  2=subject2  3=both
+No. of simultaneous behaviors:  one
+
+RAW LOG
+------------------------------------------
+frame|time(min:sec)|command
+------------------------------------------
+------------------------------------------
+
+FULL LOG
+------------------------------------------
+frame|time(min:sec)|description|action|subject
+------------------------------------------
+ 1769     0:58.97    Flee from male           either
+ 2101     1:10.03    Victim of male biting    either
+ 2124     1:10.80    Flee from male           either
+ 2733     1:31.10    Flee from male           either
+ 2863     1:35.43    Flee from male           either
+ 3243     1:48.10    Flee from male           either
+ 3931     2:11.03    Victim of male biting    either
+ 3960     2:12.00    Flee from male           either
+ 4110     2:17.00    Flee from male           either
+ 4166     2:18.87    Flee from male           either
+ 4186     2:19.53    Flee from male           either
+ 4321     2:24.03    Victim of male biting    either
+ 4332     2:24.40    Flee from male           either
+ 4568     2:32.27    Flee from male           either
+ 4615     2:33.83    Flee from male           either
+ 5082     2:49.40    Flee from male           either
+ 5344     2:58.13    Flee from male           either
+ 5711     3:10.37    Flee from male           either
+ 5737     3:11.23    Flee from male           either
+ 6259     3:28.63    Victim of male biting    either
+ 6268     3:28.93    Flee from male           either
+ 7118     3:57.27    Flee from male           either
+ 7759     4:18.63    Flee from male           either
+ 7760     4:18.67    Victim of male biting    either
+ 8272     4:35.73    Flee from male           either
+ 8631     4:47.70    Victim of male biting    either
+ 8650     4:48.33    Flee from male           either
+ 8671     4:49.03    Flee from male           either
+ 9465     5:15.50    Flee from male           either
+ 9556     5:18.53    Flee from male           either
+ 9738     5:24.60    Flee from male           either
+ 9814     5:27.13    Flee from male           either
+10026     5:34.20    Flee from male           either
+10052     5:35.07    Flee from male           either
+10102     5:36.73    Flee from male           either
+10353     5:45.10    Flee from male           either
+10484     5:49.47    Flee from male           either
+10510     5:50.33    Flee from male           either
+10530     5:51.00    Flee from male           either
+10579     5:52.63    Flee from male           either
+10599     5:53.30    Flee from male           either
+10657     5:55.23    Flee from male           either
+10744     5:58.13    Flee from male           either
+10811     6:00.37    Flee from male           either
+10865     6:02.17    Flee from male           either
+11607     6:26.90    Flee from male           either
+11661     6:28.70    Flee from male           either
+12331     6:51.03    Flee from male           either
+12498     6:56.60    Flee from male           either
+12646     7:01.53    Victim of male biting    either
+13010     7:13.67    Victim of male biting    either
+13023     7:14.10    Flee from male           either
+13896     7:43.20    Flee from male           either
+15511     8:37.03    Flee from male           either
+15550     8:38.33    Victim of male biting    either
+15562     8:38.73    Flee from male           either
+15604     8:40.13    Flee from male           either
+15631     8:41.03    Flee from male           either
+15665     8:42.17    Flee from male           either
+15709     8:43.63    Flee from male           either
+15725     8:44.17    Flee from male           either
+15770     8:45.67    Flee from male           either
+16713     9:17.10    Flee from male           either
+16749     9:18.30    Flee from male           either
+16855     9:21.83    Flee from male           either
+17270     9:35.67    Flee from male           either
+18791    10:26.37    Flee from male           either
+18822    10:27.40    Flee from male           either
+18847    10:28.23    Flee from male           either
+18910    10:30.33    Flee from male           either
+18950    10:31.67    Flee from male           either
+18980    10:32.67    Flee from male           either
+20586    11:26.20    Victim of male biting    either
+20599    11:26.63    Flee from male           either
+20766    11:32.20    Victim of male biting    either
+20781    11:32.70    Flee from male           either
+21279    11:49.30    Flee from male           either
+21463    11:55.43    Victim of male biting    either
+21469    11:55.63    Flee from male           either
+21587    11:59.57    Flee from male           either
+21678    12:02.60    Victim of male biting    either
+21681    12:02.70    Flee from male           either
+21891    12:09.70    Flee from male           either
+22161    12:18.70    Flee from male           either
+22264    12:22.13    Flee from male           either
+22303    12:23.43    Flee from male           either
+22330    12:24.33    Flee from male           either
+22359    12:25.30    Flee from male           either
+22572    12:32.40    Flee from male           either
+22728    12:37.60    Victim of male biting    either
+22728    12:37.60    Flee from male           either
+22770    12:39.00    Flee from male           either
+22870    12:42.33    Flee from male           either
+22936    12:44.53    Victim of male biting    either
+22939    12:44.63    Flee from male           either
+23424    13:00.80    Flee from male           either
+23483    13:02.77    Flee from male           either
+23530    13:04.33    Flee from male           either
+23772    13:12.40    Flee from male           either
+23797    13:13.23    Flee from male           either
+25113    13:57.10    Victim of male biting    either
+25118    13:57.27    Flee from male           either
+25177    13:59.23    Flee from male           either
+25238    14:01.27    Flee from male           either
+25323    14:04.10    Flee from male           either
+25875    14:22.50    Victim of male biting    either
+25887    14:22.90    Flee from male           either
+26019    14:27.30    Flee from male           either
+26187    14:32.90    Flee from male           either
+26841    14:54.70    Bite female              either
+27087    15:02.90    Flee from male           either
+27126    15:04.20    Victim of male biting    either
+27140    15:04.67    Flee from male           either
+27218    15:07.27    Flee from male           either
+27345    15:11.50    Flee from male           either
+27994    15:33.13    Flee from male           either
+28151    15:38.37    Flee from male           either
+28185    15:39.50    Flee from male           either
+28218    15:40.60    Victim of male biting    either
+28228    15:40.93    Flee from male           either
+28264    15:42.13    Flee from male           either
+28310    15:43.67    Victim of male biting    either
+28319    15:43.97    Flee from male           either
+28355    15:45.17    Flee from male           either
+28373    15:45.77    Victim of male biting    either
+28377    15:45.90    Flee from male           either
+28414    15:47.13    Flee from male           either
+29892    16:36.40    Flee from male           either
+30123    16:44.10    Flee from male           either
+32386    17:59.53    Flee from male           either
+32689    18:09.63    Flee from male           either
+32722    18:10.73    Flee from male           either
+33136    18:24.53    Flee from male           either
+33181    18:26.03    Flee from male           either
+33198    18:26.60    Flee from male           either
+33341    18:31.37    Flee from male           either
+35220    19:34.00    Flee from male           either
+35308    19:36.93    Flee from male           either
+36061    20:02.03    Flee from male           either
+36318    20:10.60    Victim of male biting    either
+36771    20:25.70    Flee from male           either
+40353    22:25.10    Flee from male           either
+41459    23:01.97    Chase female             either
+42417    23:33.90    Flee from male           either
+42440    23:34.67    Flee from male           either
+42839    23:47.97    Flee from male           either
+43042    23:54.73    Flee from male           either
+43101    23:56.70    Flee from male           either
+45219    25:07.30    Victim of male biting    either
+45278    25:09.27    Flee from male           either
+47866    26:35.53    Flee from male           either
+48126    26:44.20    Flee from male           either
+48173    26:45.77    Victim of male biting    either
+48186    26:46.20    Flee from male           either
+48346    26:51.53    Victim of male biting    either
+48352    26:51.73    Flee from male           either
+48877    27:09.23    Flee from male           either
+49407    27:26.90    Flee from male           either
+49499    27:29.97    Flee from male           either
+49612    27:33.73    Flee from male           either
+49928    27:44.27    Flee from male           either
+50251    27:55.03    Flee from male           either
+50356    27:58.53    Flee from male           either
+50448    28:01.60    Flee from male           either
+50582    28:06.07    Flee from male           either
+51176    28:25.87    Flee from male           either
+51211    28:27.03    Flee from male           either
+51263    28:28.77    Flee from male           either
+51428    28:34.27    Flee from male           either
+51653    28:41.77    Flee from male           either
+52099    28:56.63    Flee from male           either
+52475    29:09.17    Flee from male           either
+------------------------------------------
+
+NOTES
+------------------------------------------
+Male quivers/laterally displays at the beginning, but the first part of the behavior is cut off, so it is not scored
+While difficult to compare FM and SM sizes directly, I think the non-dominant male in this tank is actually larger (FM)
+0:56.30 Here it is apparent that colorless male is FM
+19:21.77 SM digging
+14:19.50 SM digging
+26:00.23 SM digging
+------------------------------------------
+
+MARKS
+------------------------------------------
+frame|time(min:sec)|mark name
+------------------------------------------
+    1     0:00.03    video start
+54001    30:00.03    video end
+------------------------------------------
