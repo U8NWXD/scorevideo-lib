@@ -1,0 +1,8 @@
+VIDEO FILE SET
+Videotype:  WMV
+Directory:  Z:\FAKE_DIRECTORY\Nonsense\
+Video file set:
+   9 1-54001
+Play duration (min):  30.001
+Frames/sec of files:  30
+No. of subjects:  2

@@ -1,0 +1,30 @@
+A             0      Lead Swim at female
+C             0      Chase female
+D             0      Lateral display at female
+F             0      Flee from female
+H             0      Bad quiver at female
+I             0      Bad lead swim at female
+J             0      Bad lateral display at female
+N      G      0      Spawning
+Q             0      Quiver at female 
+R             0      Rostral display at female
+S             0      Bite female
+a             0      Lead swim at male
+b             0      Lead swim at ambigous
+c             0      chase male
+d             0      Lateral display at male
+e             0      Pot entry
+f             0      Flee from male
+h             0      Bad quiver at male
+i             0      Bad lead swim at male
+j             0      Bad lateral display at male
+l             0      Male follows male into pot
+m             0      Lateral display at ambiguous
+p             0      Dig
+q             0      Quiver at male
+r             0      Rostral display at male
+s             0      Bite male
+t             0      Victim of male biting
+x             0      Pot entry exit
+y             0      Yawn
+z             0      Quiver at ambigous
