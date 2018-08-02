@@ -1,2 +1,4 @@
 .idea
 venvScoreLib
+.cache
+*__pycache__*
