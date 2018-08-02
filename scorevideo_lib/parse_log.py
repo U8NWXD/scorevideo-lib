@@ -19,7 +19,7 @@ class Log:
     @staticmethod
     def get_section_header(log_file):
         header = []
-        for i in range(2):
+        for _ in range(2):
             header.append(log_file.readline())
         return header
 
