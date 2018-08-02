@@ -2,7 +2,10 @@ class Log:
 
     @staticmethod
     def get_section_header(log_file):
-        pass
+        header = []
+        for i in range(2):
+            header.append(log_file.readline())
+        return header
 
     @staticmethod
     def get_section_video_info(log_file):
