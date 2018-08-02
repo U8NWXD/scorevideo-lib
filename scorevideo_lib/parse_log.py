@@ -25,7 +25,14 @@ class Log:
 
     @staticmethod
     def get_section_video_info(log_file):
-        pass
+        while log_file.readline() != "VIDEO FILE SET\n":
+            pass
+        video_info = []
+        line = log_file.readline()
+        while not line.rstrip() == "":
+            video_info.append(line)
+            line = log_file.readline()
+        return video_info
 
     @staticmethod
     def get_section_commands(log_file):
