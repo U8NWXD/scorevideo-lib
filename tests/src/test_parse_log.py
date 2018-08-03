@@ -22,18 +22,35 @@ from scorevideo_lib.parse_log import Log
 
 TEST_RES = "tests/res"
 
+def get_actual_expected(expected_path, extractor, source_path):
+    """Get the actual and expected outputs from section extraction methods
+
+    Args:
+        expected_path: Path to the file containing the expected section
+        extractor: Method to use to extract the section from source_path
+        source_path: Path to the log file to attempt extraction from
+
+    Returns: (expected, actual) where expected is a list of the expected lines
+    and actual is the list of lines actually extracted by extractor
+
+    """
+    with open(expected_path, 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(source_path, 'r') as source:
+        actual = extractor(source)
+    return expected, actual
+
 def test_get_section_header_all():
     """Test that the header can be extracted from a normal log file
 
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/header.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_header(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/header.txt",
+                                   Log.get_section_header,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_video_info_all():
     """Test that the video info section can be extracted from a normal log file
@@ -41,12 +58,11 @@ def test_get_section_video_info_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/video_info.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_video_info(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/video_info.txt",
+                                   Log.get_section_video_info,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_commands_all():
     """Test that the commands section can be extracted from a normal log file
@@ -54,12 +70,11 @@ def test_get_section_commands_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/comm.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_commands(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/comm.txt",
+                                   Log.get_section_commands,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_raw_all():
     """Test that the raw log section can be extracted from a normal log file
@@ -67,12 +82,11 @@ def test_get_section_raw_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/raw.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_raw(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/raw.txt",
+                                   Log.get_section_raw,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_full_all():
     """Test that the full log section can be extracted from a normal log file
@@ -80,12 +94,11 @@ def test_get_section_full_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/full.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_full(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/full.txt",
+                                   Log.get_section_full,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_notes_all():
     """Test that the notes section can be extracted from a normal log file
@@ -93,12 +106,11 @@ def test_get_section_notes_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/notes.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_notes(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/notes.txt",
+                                   Log.get_section_notes,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
 
 def test_get_section_marks_all():
     """Test that the marks section can be extracted from a normal log file
@@ -106,9 +118,8 @@ def test_get_section_marks_all():
     Returns: None
 
     """
-    with open(TEST_RES + "/expectedLogParts/marks.txt", 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        actual = Log.get_section_marks(file)
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/marks.txt",
+                                   Log.get_section_marks,
+                                   TEST_RES + "/realisticLogs/all.txt")
 
-    assert expected == actual
+    assert exp == act
