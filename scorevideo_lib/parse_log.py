@@ -32,11 +32,11 @@ class Log:
         Returns:
             A list of the lines making up the header in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         header = []
         for _ in range(2):
-            header.append(log_file.readline())
+            header.append(log_file.readline().rstrip())
         return header
 
     @staticmethod
@@ -56,15 +56,15 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
-        while log_file.readline() != "VIDEO FILE SET\n":
+        while log_file.readline().rstrip() != "VIDEO FILE SET":
             pass
         video_info = []
-        line = log_file.readline()
-        while not line.rstrip() == "":
+        line = log_file.readline().rstrip()
+        while not line == "":
             video_info.append(line)
-            line = log_file.readline()
+            line = log_file.readline().rstrip()
         return video_info
 
     @staticmethod
@@ -83,7 +83,7 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         pass
 
@@ -103,7 +103,7 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         pass
 
@@ -123,7 +123,7 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         pass
 
@@ -142,7 +142,7 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         pass
 
@@ -162,6 +162,6 @@ class Log:
         Returns:
             A list of the lines making up the section in sequential order, with
             each line a separate element in the list.
-            Newlines or return carriages are not stripped from the ends of lines.
+            Newlines or return carriages are stripped from the ends of lines.
         """
         pass

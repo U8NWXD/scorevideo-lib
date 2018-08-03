@@ -20,7 +20,7 @@ TEST_RES = "tests/res"
 
 def test_get_section_header_all():
     with open(TEST_RES + "/expectedLogParts/header.txt", 'r') as file:
-        expected = file.readlines()
+        expected = [line.rstrip() for line in file.readlines()]
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
         actual = Log.get_section_header(file)
 
@@ -28,7 +28,7 @@ def test_get_section_header_all():
 
 def test_get_section_video_info():
     with open(TEST_RES + "/expectedLogParts/video_info.txt", 'r') as file:
-        expected = file.readlines()
+        expected = [line.rstrip() for line in file.readlines()]
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
         actual = Log.get_section_video_info(file)
 
