@@ -14,11 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Test log file parsing
+
+"""
+
 from scorevideo_lib.parse_log import Log
 
 TEST_RES = "tests/res"
 
 def test_get_section_header_all():
+    """Test that the header can be extracted from a normal log file
+
+    Returns: None
+
+    """
     with open(TEST_RES + "/expectedLogParts/header.txt", 'r') as file:
         expected = [line.rstrip() for line in file.readlines()]
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
@@ -26,7 +35,12 @@ def test_get_section_header_all():
 
     assert expected == actual
 
-def test_get_section_video_info():
+def test_get_section_video_info_all():
+    """Test that the video info section can be extracted from a normal log file
+
+    Returns: None
+
+    """
     with open(TEST_RES + "/expectedLogParts/video_info.txt", 'r') as file:
         expected = [line.rstrip() for line in file.readlines()]
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:

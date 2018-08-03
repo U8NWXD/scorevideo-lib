@@ -14,9 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Parse log files
+
+"""
+
 from scorevideo_lib.exceptions import FileFormatError
 
-class Log(object):
+class Log:
+    """Store an interpreted form of a log file and perform operations on it
+
+    Attributes:
+
+    """
 
     @staticmethod
     def get_section_header(log_file):
