@@ -47,3 +47,68 @@ def test_get_section_video_info_all():
         actual = Log.get_section_video_info(file)
 
     assert expected == actual
+
+def test_get_section_commands_all():
+    """Test that the commands section can be extracted from a normal log file
+
+    Returns: None
+
+    """
+    with open(TEST_RES + "/expectedLogParts/comm.txt", 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        actual = Log.get_section_commands(file)
+
+    assert expected == actual
+
+def test_get_section_raw_all():
+    """Test that the raw log section can be extracted from a normal log file
+
+    Returns: None
+
+    """
+    with open(TEST_RES + "/expectedLogParts/raw.txt", 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        actual = Log.get_section_raw(file)
+
+    assert expected == actual
+
+def test_get_section_full_all():
+    """Test that the full log section can be extracted from a normal log file
+
+    Returns: None
+
+    """
+    with open(TEST_RES + "/expectedLogParts/full.txt", 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        actual = Log.get_section_full(file)
+
+    assert expected == actual
+
+def test_get_section_notes_all():
+    """Test that the notes section can be extracted from a normal log file
+
+    Returns: None
+
+    """
+    with open(TEST_RES + "/expectedLogParts/notes.txt", 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        actual = Log.get_section_notes(file)
+
+    assert expected == actual
+
+def test_get_section_marks_all():
+    """Test that the marks section can be extracted from a normal log file
+
+    Returns: None
+
+    """
+    with open(TEST_RES + "/expectedLogParts/marks.txt", 'r') as file:
+        expected = [line.rstrip() for line in file.readlines()]
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        actual = Log.get_section_marks(file)
+
+    assert expected == actual

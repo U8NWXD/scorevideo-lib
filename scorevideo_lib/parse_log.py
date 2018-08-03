@@ -89,7 +89,12 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        pass
+        header = ["-------------------------------",
+                  "start|stop|subject|description",
+                  "-------------------------------"]
+        end = "-------------------------------"
+        return Log.get_section(log_file, "COMMAND SET AND SETTINGS", header,
+                               end)
 
     @staticmethod
     def get_section_raw(log_file):
@@ -109,7 +114,11 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        pass
+        header = ["------------------------------------------",
+                  "frame|time(min:sec)|command",
+                  "------------------------------------------"]
+        end = "------------------------------------------"
+        return Log.get_section(log_file, "RAW LOG", header, end)
 
     @staticmethod
     def get_section_full(log_file):
@@ -129,7 +138,11 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        pass
+        header = ["------------------------------------------",
+                  "frame|time(min:sec)|description|action|subject",
+                  "------------------------------------------"]
+        end = "------------------------------------------"
+        return Log.get_section(log_file, "FULL LOG", header, end)
 
     @staticmethod
     def get_section_notes(log_file):
@@ -148,7 +161,9 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        pass
+        end = "------------------------------------------"
+        header = ["------------------------------------------"]
+        return Log.get_section(log_file, "NOTES", header, end)
 
     @staticmethod
     def get_section_marks(log_file):
@@ -168,7 +183,11 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        pass
+        header = ["------------------------------------------",
+                  "frame|time(min:sec)|mark name",
+                  "------------------------------------------"]
+        end = "------------------------------------------"
+        return Log.get_section(log_file, "MARKS", header, end)
 
     @staticmethod
     def get_section(log_file, start, header, end):
