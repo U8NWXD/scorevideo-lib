@@ -1,4 +1,4 @@
-# scorevideo_lib: A library for working with scorevideo
+# This file is part of scorevideo_lib: A library for working with scorevideo
 # Copyright (C) 2018  U8N WXD <cs.temporary@icloud.com>
 #
 # This program is free software: you can redistribute it and/or modify
