@@ -19,6 +19,7 @@
 """
 
 from scorevideo_lib.parse_log import Log
+from scorevideo_lib.exceptions import FileFormatError
 
 TEST_RES = "tests/res"
 
@@ -88,6 +89,17 @@ def test_get_section_raw_all():
 
     assert exp == act
 
+def test_get_section_raw_no_behavior():
+    """Get the raw log section of a log that has no behavior recorded
+
+    Returns: None
+
+    """
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
+                                   Log.get_section_raw,
+                                   TEST_RES + "/realisticLogs/noBehavior.txt")
+    assert exp == act
+
 def test_get_section_full_all():
     """Test that the full log section can be extracted from a normal log file
 
@@ -98,6 +110,17 @@ def test_get_section_full_all():
                                    Log.get_section_full,
                                    TEST_RES + "/realisticLogs/all.txt")
 
+    assert exp == act
+
+def test_get_section_full_no_behavior():
+    """Get the full log section of a log that has no behavior recorded
+
+    Returns: None
+
+    """
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
+                                   Log.get_section_full,
+                                   TEST_RES + "/realisticLogs/noBehavior.txt")
     assert exp == act
 
 def test_get_section_notes_all():
@@ -112,6 +135,17 @@ def test_get_section_notes_all():
 
     assert exp == act
 
+def test_get_section_notes_no_notes():
+    """Get the notes section of a log that has no notes recorded
+
+    Returns: None
+
+    """
+    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
+                                   Log.get_section_notes,
+                                   TEST_RES + "/realisticLogs/noNotes.txt")
+    assert exp == act
+
 def test_get_section_marks_all():
     """Test that the marks section can be extracted from a normal log file
 
@@ -123,3 +157,66 @@ def test_get_section_marks_all():
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
+
+def test_get_section_missing_end():
+    """Test handling of section ends that aren't found.
+
+    Test that a FileFormatError with the proper message is raised when the line
+    thought to signal the end of the section is never found.
+
+    Returns: None
+
+    """
+    failed = False
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        try:
+            Log.get_section(file, "RAW LOG", [], "-----")
+        except FileFormatError as error:
+            assert str(error) == "The end line '-----' was not found in " \
+                                 "tests/res/realisticLogs/all.txt"
+            failed = True
+    assert failed
+
+def test_get_section_missing_start():
+    """Test handling of section starts that aren't found.
+
+    Test that a FileFormatError with the proper message is raised when the line
+    thought to signal the start of the section is never found.
+
+    Returns: None
+
+    """
+    failed = False
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        try:
+            Log.get_section(file, "-----", [], "RAW LOG")
+        except FileFormatError as error:
+            assert str(error) == "The start line '-----' was not found in " \
+                                 "tests/res/realisticLogs/all.txt"
+            failed = True
+    assert failed
+
+def test_get_section_missing_header():
+    """Test handling of section headers that don't match what is expected.
+
+    Test that a FileFormatError with the proper message is raised when there is
+    a difference in the expected header and the header actually found.
+
+    Returns: None
+
+    """
+    failed = False
+    headers = ["------------------------------------------",
+               "frame|time(min:sec)|command",
+               "---"]
+    end = "------------------------------------------"
+    exp = FileFormatError.from_lines("tests/res/realisticLogs/all.txt",
+                                     "------------------------------------------",
+                                     "---")
+    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
+        try:
+            Log.get_section(file, "RAW LOG", headers, end)
+        except FileFormatError as error:
+            assert str(error) == str(exp)
+            failed = True
+    assert failed
