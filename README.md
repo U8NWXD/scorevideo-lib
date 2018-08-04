@@ -1,18 +1,22 @@
 # `scorevideo_lib`: Scorevideo Library
 [![Build Status](https://travis-ci.com/U8NWXD/scorevideo_lib.svg?branch=master)](https://travis-ci.com/U8NWXD/scorevideo_lib)
+[![codecov](https://codecov.io/gh/U8NWXD/scorevideo_lib/branch/master/graph/badge.svg)](https://codecov.io/gh/U8NWXD/scorevideo_lib)
 
 Library of utilities for working with the MATLAB program
 `scorevideo`.
 
 ## Development Status
-`scorevideo_lib` is still in early development and has not yet had an alpha release.
+`scorevideo_lib` is still in early development and has not yet had an alpha 
+release.
 
 ## Code Style
-Python code should conform to the [PEP8](https://www.python.org/dev/peps/pep-0008/) style guidelines.
+Python code should conform to the 
+[PEP8](https://www.python.org/dev/peps/pep-0008/) style guidelines.
 
 Docstrings should conform to the 
 [Google Style](https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings).
-For example (copied from [Google's Style Guide](https://github.com/google/styleguide)):
+For example (copied from 
+[Google's Style Guide](https://github.com/google/styleguide)):
 ```python
 def fetch_bigtable_rows(big_table, keys, other_silly_variable=None):
     """Fetches rows from a Bigtable.
@@ -46,25 +50,32 @@ def fetch_bigtable_rows(big_table, keys, other_silly_variable=None):
 ```
 
 ## Testing
-To run all tests, execute `test.sh`. These tests are checked are run by [Travis CI](https://travis-ci.com)
-on all pull requests and the master branch. Before each commit, run `test.sh` and ensure that all tests pass. All tests
+To run all tests, execute `test.sh`. These tests are checked are run by 
+[Travis CI](https://travis-ci.com) on all pull requests and the master branch. 
+Before each commit, run `test.sh` and ensure that all tests pass. All tests
 should pass on each commit to make reverting easy.
 
 ### Unit Testing
-Unit testing is performed using [`pytest`](https://pytest.org/). To run these tests, execute `python -m pytest` from the
-repository root.
+Unit testing is performed using [`pytest`](https://pytest.org/). To run these 
+tests, execute `python -m pytest` from the repository root.
 
 ### Code and Style Analysis
 PEP8 are checked by `pylint`.
-`pylint` also performs static code analysis to catch some programming errors. This analysis is intended to be a
-fall-back defense, as unit testing should be thorough.
+`pylint` also performs static code analysis to catch some programming errors. 
+This analysis is intended to be a fall-back defense, as unit testing should be 
+thorough.
 
 ### Code Coverage
 When running the test suite using `test.sh`, code coverage is computed by 
-[`pytest-cov`](https://pytest-cov.readthedocs.io/en/latest/) when running `pytest` and output
-after test results. Use these results to ensure that all tests are being covered. If the total coverage is not `100%`, 
-run `coverage report -m` to see which lines were not tested. Incomplete coverage may be acceptable if the untested lines
-should not have been tested (e.g. code stubs for un-implemented functions).
+[`pytest-cov`](https://pytest-cov.readthedocs.io/en/latest/) when running 
+`pytest` and output after test results. Use these results to ensure that all 
+tests are being covered. If the total coverage is not `100%`, run 
+`coverage report -m` to see which lines were not tested. Incomplete coverage 
+may be acceptable if the untested lines should not have been tested (e.g. code 
+stubs for un-implemented functions).
+
+Coverage is tracked by [Codecov](https://codecov.io), which serves the badge at
+the top of this README.
 
 ## License and Copyright
 Copyright (c) 2018  U8N WXD <cs.temporary@icloud.com>
