@@ -24,8 +24,8 @@ class FileFormatError(Exception):
     The message should describe the file and how it is mis-formatted.
     """
 
-    @classmethod
-    def from_lines(cls, filename, found_line, expected_line):
+    @staticmethod
+    def from_lines(filename, found_line, expected_line):
         """Create new object with message from parameters.
 
         Args:
@@ -39,4 +39,4 @@ class FileFormatError(Exception):
         message = "In the file '" + filename + "', the line '" + \
                   found_line + "' was found instead of the expected '" + \
                   expected_line + "'."
-        super().__init__(message)
+        return FileFormatError(message)
