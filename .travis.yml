@@ -3,7 +3,7 @@ python:
   - "3.6"
 # command to install dependencies
 script:
-  - python -m pytest
+  - python -m pytest --cov=scorevideo_lib tests/src/
   - find scorevideo_lib -name *.py | xargs pylint
   - find tests/src -name *.py | xargs pylint
 after_success:
