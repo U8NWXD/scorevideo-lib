@@ -23,6 +23,7 @@ from scorevideo_lib.exceptions import FileFormatError
 
 TEST_RES = "tests/res"
 
+
 def get_actual_expected(expected_path, extractor, source_path):
     """Get the actual and expected outputs from section extraction methods
 
@@ -41,6 +42,7 @@ def get_actual_expected(expected_path, extractor, source_path):
         actual = extractor(source)
     return expected, actual
 
+
 def test_get_section_header_all():
     """Test that the header can be extracted from a normal log file
 
@@ -52,6 +54,7 @@ def test_get_section_header_all():
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
+
 
 def test_get_section_video_info_all():
     """Test that the video info section can be extracted from a normal log file
@@ -65,6 +68,7 @@ def test_get_section_video_info_all():
 
     assert exp == act
 
+
 def test_get_section_commands_all():
     """Test that the commands section can be extracted from a normal log file
 
@@ -76,6 +80,7 @@ def test_get_section_commands_all():
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
+
 
 def test_get_section_raw_all():
     """Test that the raw log section can be extracted from a normal log file
@@ -89,6 +94,7 @@ def test_get_section_raw_all():
 
     assert exp == act
 
+
 def test_get_section_raw_no_behavior():
     """Get the raw log section of a log that has no behavior recorded
 
@@ -99,6 +105,7 @@ def test_get_section_raw_no_behavior():
                                    Log.get_section_raw,
                                    TEST_RES + "/realisticLogs/noBehavior.txt")
     assert exp == act
+
 
 def test_get_section_full_all():
     """Test that the full log section can be extracted from a normal log file
@@ -112,6 +119,7 @@ def test_get_section_full_all():
 
     assert exp == act
 
+
 def test_get_section_full_no_behavior():
     """Get the full log section of a log that has no behavior recorded
 
@@ -122,6 +130,7 @@ def test_get_section_full_no_behavior():
                                    Log.get_section_full,
                                    TEST_RES + "/realisticLogs/noBehavior.txt")
     assert exp == act
+
 
 def test_get_section_notes_all():
     """Test that the notes section can be extracted from a normal log file
@@ -135,6 +144,7 @@ def test_get_section_notes_all():
 
     assert exp == act
 
+
 def test_get_section_notes_no_notes():
     """Get the notes section of a log that has no notes recorded
 
@@ -145,6 +155,7 @@ def test_get_section_notes_no_notes():
                                    Log.get_section_notes,
                                    TEST_RES + "/realisticLogs/noNotes.txt")
     assert exp == act
+
 
 def test_get_section_marks_all():
     """Test that the marks section can be extracted from a normal log file
@@ -157,6 +168,7 @@ def test_get_section_marks_all():
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
+
 
 def test_get_section_missing_end():
     """Test handling of section ends that aren't found.
@@ -177,6 +189,7 @@ def test_get_section_missing_end():
             failed = True
     assert failed
 
+
 def test_get_section_missing_start():
     """Test handling of section starts that aren't found.
 
@@ -195,6 +208,7 @@ def test_get_section_missing_start():
                                  "tests/res/realisticLogs/all.txt"
             failed = True
     assert failed
+
 
 def test_get_section_missing_header():
     """Test handling of section headers that don't match what is expected.

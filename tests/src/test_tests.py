@@ -22,6 +22,7 @@ from tests.src.test_parse_log import get_actual_expected
 
 TEST_RES = "tests/res"
 
+
 def test_file_read():
     """Test that file reading works.
 
@@ -36,6 +37,7 @@ def test_file_read():
         actual = file.readlines()
     assert expected == actual
 
+
 def return_file_read(_):
     """Return the lines expected to be found in the file_read test file.
 
@@ -48,6 +50,7 @@ def return_file_read(_):
 
     """
     return ["scorevideo LOG", "File:  log.mat"]
+
 
 def test_get_actual_expected():
     """Test that the get_actual_expected function works.
