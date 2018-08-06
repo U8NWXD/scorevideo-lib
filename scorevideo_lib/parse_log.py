@@ -20,12 +20,42 @@
 
 from scorevideo_lib.exceptions import FileFormatError
 
+
 class Log:
     """Store an interpreted form of a log file and perform operations on it
 
     Attributes:
-
+        log_file: Reference to the open log file. May need to be re-wound
+        header: List of the lines in the header section
+        video_info: List of the lines in the video info section
+        commands: List of the lines in the commands section
+        raw: List of the lines in the raw log section
+        full: List of the lines in the full log section
+        notes: List of the lines in the notes section
+        marks: List of the lines in the marks section
     """
+
+    # pylint: disable=too-many-instance-attributes
+    # In this case, it is reasonable to have an instance attribute per section
+
+    def __init__(self, log_file):
+        """Parse log file into its sections.
+
+        Populate the attributes of the Log class by using the get_section_*
+        static methods to extract sections that are stored in attributes.
+
+        Args:
+            log_file: An open file object that points to the log file to read.
+        """
+        self.log_file = log_file
+        self.header = Log.get_section_header(log_file)
+        self.video_info = Log.get_section_video_info(log_file)
+        self.commands = Log.get_section_commands(log_file)
+        self.raw = Log.get_section_raw(log_file)
+        self.full = Log.get_section_full(log_file)
+        self.notes = Log.get_section_notes(log_file)
+        self.marks = Log.get_section_marks(log_file)
+        log_file.seek(0)
 
     @staticmethod
     def get_section_header(log_file):
