@@ -14,310 +14,90 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test log file parsing
+"""Unit tests for the :py:class:BehaviorFull class
 
 """
 
 import pytest
-from scorevideo_lib.parse_log import Log
-from scorevideo_lib.exceptions import FileFormatError
 from scorevideo_lib.parse_log import BehaviorFull
 
 TEST_RES = "tests/res"
 
-
-def get_actual_expected(expected_path, extractor, source_path):
-    """Get the actual and expected outputs from section extraction methods
-
-    Args:
-        expected_path: Path to the file containing the expected section
-        extractor: Method to use to extract the section from source_path
-        source_path: Path to the log file to attempt extraction from
-
-    Returns: (expected, actual) where expected is a list of the expected lines
-    and actual is the list of lines actually extracted by extractor
-
-    """
-    with open(expected_path, 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
-    with open(source_path, 'r') as source:
-        actual = extractor(source)
-    return expected, actual
-
-
-def test_get_section_header_all():
-    """Test that the header can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/header.txt",
-                                   Log.get_section_header,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_video_info_all():
-    """Test that the video info section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/video_info.txt",
-                                   Log.get_section_video_info,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_commands_all():
-    """Test that the commands section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/comm.txt",
-                                   Log.get_section_commands,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_raw_all():
-    """Test that the raw log section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/raw.txt",
-                                   Log.get_section_raw,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_raw_no_behavior():
-    """Get the raw log section of a log that has no behavior recorded
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_raw,
-                                   TEST_RES + "/realisticLogs/noBehavior.txt")
-    assert exp == act
-
-
-def test_get_section_full_all():
-    """Test that the full log section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/full.txt",
-                                   Log.get_section_full,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_full_no_behavior():
-    """Get the full log section of a log that has no behavior recorded
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_full,
-                                   TEST_RES + "/realisticLogs/noBehavior.txt")
-    assert exp == act
-
-
-def test_get_section_notes_all():
-    """Test that the notes section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/notes.txt",
-                                   Log.get_section_notes,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_notes_no_notes():
-    """Get the notes section of a log that has no notes recorded
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_notes,
-                                   TEST_RES + "/realisticLogs/noNotes.txt")
-    assert exp == act
-
-
-def test_get_section_marks_all():
-    """Test that the marks section can be extracted from a normal log file
-
-    Returns: None
-
-    """
-    exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/marks.txt",
-                                   Log.get_section_marks,
-                                   TEST_RES + "/realisticLogs/all.txt")
-
-    assert exp == act
-
-
-def test_get_section_missing_end():
-    """Test handling of section ends that aren't found.
-
-    Test that a FileFormatError with the proper message is raised when the line
-    thought to signal the end of the section is never found.
-
-    Returns: None
-
-    """
-    failed = False
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        try:
-            Log.get_section(file, "RAW LOG", [], "-----")
-        except FileFormatError as error:
-            assert str(error) == "The end line '-----' was not found in " \
-                                 "tests/res/realisticLogs/all.txt"
-            failed = True
-    assert failed
-
-
-def test_get_section_missing_start():
-    """Test handling of section starts that aren't found.
-
-    Test that a FileFormatError with the proper message is raised when the line
-    thought to signal the start of the section is never found.
-
-    Returns: None
-
-    """
-    failed = False
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        try:
-            Log.get_section(file, "-----", [], "RAW LOG")
-        except FileFormatError as error:
-            assert str(error) == "The start line '-----' was not found in " \
-                                 "tests/res/realisticLogs/all.txt"
-            failed = True
-    assert failed
-
-
-def test_get_section_missing_header():
-    """Test handling of section headers that don't match what is expected.
-
-    Test that a FileFormatError with the proper message is raised when there is
-    a difference in the expected header and the header actually found.
-
-    Returns: None
-
-    """
-    failed = False
-    headers = ["------------------------------------------",
-               "frame|time(min:sec)|command",
-               "---"]
-    end = "------------------------------------------"
-    exp = FileFormatError.from_lines("tests/res/realisticLogs/all.txt",
-                                     "------------------------------------------",
-                                     "---")
-    with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
-        try:
-            Log.get_section(file, "RAW LOG", headers, end)
-        except FileFormatError as error:
-            assert str(error) == str(exp)
-            failed = True
-    assert failed
-
 # pragma pylint: disable=missing-docstring
 
 
-class TestBehaviorFull:
-    """Unit tests for the :py:class:BehaviorFull class
+def test_init_invalid_time_two_decimal_points():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0.05.70    Pot entry exit          either")
 
-    """
 
-    @staticmethod
-    def test_init_invalid_time_two_decimal_points():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0.05.70    Pot entry exit          either")
+def test_init_invalid_raw_behavior():
+    with pytest.raises(TypeError):
+        BehaviorFull("53946     29:58.20     C")
 
-    @staticmethod
-    def test_init_invalid_raw_behavior():
-        with pytest.raises(TypeError):
-            BehaviorFull("53946     29:58.20     C")
 
-    @staticmethod
-    def test_init_invalid_time_no_decimal_points():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05:70    Pot entry exit          either")
+def test_init_invalid_time_no_decimal_points():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05:70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_no_description():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05.70              either")
 
-    @staticmethod
-    def test_init_invalid_negative_frame():
-        with pytest.raises(TypeError):
-            BehaviorFull("  -171     0:05.70    Pot entry exit          either")
+def test_init_invalid_no_description():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05.70              either")
 
-    @staticmethod
-    def test_init_invalid_negative_time():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     -0:05.70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_no_frame():
-        with pytest.raises(TypeError):
-            BehaviorFull("       0:05.70    Pot entry exit          either")
+def test_init_invalid_negative_frame():
+    with pytest.raises(TypeError):
+        BehaviorFull("  -171     0:05.70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_no_time():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171         Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_no_either():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05.70    Pot entry exit          ")
+def test_init_invalid_negative_time():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     -0:05.70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_one_space():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05.70 Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_5_elems():
-        with pytest.raises(TypeError):
-            BehaviorFull("|  171   0:05.70  Pot entry exit   either  ")
+def test_init_invalid_no_frame():
+    with pytest.raises(TypeError):
+        BehaviorFull("       0:05.70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_invalid_behavior():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05.70  Pot entry exit!          either")
 
-    @staticmethod
-    def test_init_invalid_subject():
-        with pytest.raises(TypeError):
-            BehaviorFull("  171     0:05.70  Pot entry exit          both")
+def test_init_invalid_no_time():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171         Pot entry exit          either")
 
-    @staticmethod
-    def test_init_valid_normal():
-        BehaviorFull("  171     28:52.70    Pot entry exit          either")
 
-    @staticmethod
-    def test_init_valid_short_time():
-        BehaviorFull("  171     0:05.70    Pot entry exit          either")
+def test_init_invalid_no_either():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05.70    Pot entry exit          ")
 
-    @staticmethod
-    def test_init_valid_long_time():
-        BehaviorFull("  171     0:01:05.70    Pot entry exit          either")
+
+def test_init_invalid_one_space():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05.70 Pot entry exit          either")
+
+
+def test_init_invalid_5_elems():
+    with pytest.raises(TypeError):
+        BehaviorFull("|  171   0:05.70  Pot entry exit   either  ")
+
+
+def test_init_invalid_behavior():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05.70  Pot entry exit!          either")
+
+
+def test_init_invalid_subject():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     0:05.70  Pot entry exit          both")
+
+
+def test_init_valid_normal():
+    BehaviorFull("  171     28:52.70    Pot entry exit          either")
+
+
+def test_init_valid_short_time():
+    BehaviorFull("  171     0:05.70    Pot entry exit          either")
+
+
+def test_init_valid_long_time():
+    BehaviorFull("  171     0:01:05.70    Pot entry exit          either")
