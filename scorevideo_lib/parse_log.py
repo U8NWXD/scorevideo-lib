@@ -18,6 +18,9 @@
 
 """
 
+from typing import List
+import re
+from datetime import timedelta
 from scorevideo_lib.exceptions import FileFormatError
 
 
@@ -58,7 +61,7 @@ class Log:
         log_file.seek(0)
 
     @staticmethod
-    def get_section_header(log_file):
+    def get_section_header(log_file) -> List[str]:
         """Get the header section of a log.
 
         Extract the top section (top two lines) of a log. This section includes
@@ -81,7 +84,7 @@ class Log:
         return header
 
     @staticmethod
-    def get_section_video_info(log_file):
+    def get_section_video_info(log_file) -> List[str]:
         """Get the video info section of a log.
 
         Extract the video info section (headed by the line "VIDEO FILE SET" of a
@@ -102,7 +105,7 @@ class Log:
         return Log.get_section(log_file, "VIDEO FILE SET", [], "")
 
     @staticmethod
-    def get_section_commands(log_file):
+    def get_section_commands(log_file) -> List[str]:
         """Get the commands section of a log.
 
         Extract the commands section (headed by the line "COMMAND SET AND
@@ -127,7 +130,7 @@ class Log:
                                end)
 
     @staticmethod
-    def get_section_raw(log_file):
+    def get_section_raw(log_file) -> List[str]:
         """Get the raw log section of a log.
 
         Extract the section of the log that contains the raw scoring log. This
@@ -151,7 +154,7 @@ class Log:
         return Log.get_section(log_file, "RAW LOG", header, end)
 
     @staticmethod
-    def get_section_full(log_file):
+    def get_section_full(log_file) -> List[str]:
         """Get the full log section of a log.
 
         Extract the section of the log that contains the full scoring log. This
@@ -175,7 +178,7 @@ class Log:
         return Log.get_section(log_file, "FULL LOG", header, end)
 
     @staticmethod
-    def get_section_notes(log_file):
+    def get_section_notes(log_file) -> List[str]:
         """Get the notes section of a log.
 
         Extract the notes section of the log, which contains arbitrary notes
@@ -196,7 +199,7 @@ class Log:
         return Log.get_section(log_file, "NOTES", header, end)
 
     @staticmethod
-    def get_section_marks(log_file):
+    def get_section_marks(log_file) -> List[str]:
         """Get the marks section of a log.
 
         Extract the marks section of the log, which stores the frame number and
@@ -220,7 +223,8 @@ class Log:
         return Log.get_section(log_file, "MARKS", header, end)
 
     @staticmethod
-    def get_section(log_file, start, header, end):
+    def get_section(log_file, start: str, header: List[str], end: List[str]) \
+            -> List[str]:
         """Get an arbitrary section from a log file.
 
         Extract an arbitrary section from a log file. The section is defined by
@@ -269,3 +273,180 @@ class Log:
             line = log_file.readline().rstrip()
 
         return section
+
+
+class BehaviorFull:
+    """Store an interpreted representation of a behavior from the full section
+
+    Attributes:
+        frame: A positive integer representing the frame number on which the
+            behavior was scored.
+        time: A :py:class:timedelta object that represents the time elapsed
+            from the start of the clip to the behavior being scored. This is a
+            representation of the time listed in the log line.
+        description: The name of the behavior that appears as the second-to-last
+            element in the provided line
+        subject: Always the string ``either``
+    """
+
+    def __init__(self, behavior_line: str):
+        """Create a new :py:class:`BehaviorFull` object from the provided line.
+
+        >>> behav = BehaviorFull(" 1769  0:58.97  Flee from male  either ")
+        >>> behav.frame
+        1769
+        >>> behav.time
+        datetime.timedelta(seconds=58, microseconds=970000)
+        >>> behav.description
+        'Flee from male'
+        >>> behav.subject
+        'either'
+
+        Args:
+            behavior_line: A line from the ``FULL LOG`` section of a log file
+        Returns:
+            None
+        Raises:
+            TypeError: When the provided line does not conform to the
+                expected format. Notably, all 4 elements of the line must be
+                separated from each other by at least 2 spaces.
+        """
+        split = re.split(r"\s{2,}", behavior_line)
+        split[0] = split[0].lstrip()
+        split[-1] = split[-1].rstrip()
+        line = [elem for elem in split if elem != ""]
+        line_error = "The line '" + behavior_line + "' is not a valid line " \
+                                                    "from the FULL LOG section"
+        if len(line) > 4:
+            err = "{} (num elements: {} > 4)".format(line_error, len(line))
+            raise TypeError(err)
+        elif len(line) < 4:
+            err = "{} (num elements: {} < 4)".format(line_error, len(line))
+            raise TypeError(err)
+        elif not BehaviorFull.validate_frame(line[0]):
+            err = "{} ('{}' is not a valid frame number)".format(line_error,
+                                                                 line[0])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_time(line[1]):
+            err = "{} ('{}' is not a valid time)".format(line_error, line[1])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_behavior(line[2]):
+            err = "{} ('{}' is not a valid behavior)".format(line_error,
+                                                             line[2])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_subject(line[3]):
+            err = "{} ('{}' is not a valid subject)".format(line_error, line[3])
+            raise TypeError(err)
+
+        self.frame = int(line[0])
+        split_time = line[1].split(":")
+        secs = float(split_time[-1])
+        # MM:SS.SS -> [MM, SS.SS]
+        if len(split_time) == 2:
+            secs += int(split_time[0]) * 60
+        # HH:MM:SS.SS -> [HH, MM, SS.SS]
+        elif len(split_time) == 3:
+            secs += int(split_time[0]) * 60 * 60
+            secs += int(split_time[1]) * 60
+        self.time = timedelta(seconds=secs)
+        self.description = line[2]
+        self.subject = line[3]
+
+    @staticmethod
+    def validate_frame(frame: str) -> bool:
+        """Check whether ``frame`` represents a valid frame number
+
+        A valid frame number is any non-negative integer. Specifically, any
+        ``frame`` that is composed solely of one or more digits 0-9 is accepted.
+
+        >>> BehaviorFull.validate_frame("-5")
+        False
+        >>> BehaviorFull.validate_frame("05")
+        True
+        >>> BehaviorFull.validate_frame("hi5")
+        False
+        >>> BehaviorFull.validate_frame("50")
+        True
+        >>> BehaviorFull.validate_frame(" 50 ")
+        False
+
+        Args:
+            frame: Potential frame number to validate
+
+        Returns: ``True`` if ``frame`` is a valid frame number, ``False``
+            otherwise
+
+        """
+        return re.fullmatch(r"\A[0-9]+\Z", frame) is not None
+
+    @staticmethod
+    def validate_time(time_str: str) -> bool:
+        """Check whether ``time_str`` represents a valid log time stamp
+
+        The following formats are accepted where ``#`` represents a digit 0-9
+        * ``#:##.##``
+        * ``##:##.##``
+        * ``#:##:##.##``
+        * ``##:##:##.##``
+
+        TODO: Check whether the minute and hour values are valid (i.e. <60)
+
+        Args:
+            time_str: The potential time representation to validate
+
+        Returns: ``True`` if ``time_str`` is a valid time, ``False`` otherwise
+
+        """
+        num_colons = time_str.count(":")
+
+        if num_colons == 1:
+            return re.fullmatch(r"\A[0-9]{1,2}:[0-9]{2}\.[0-9]{2}\Z",
+                                time_str) is not None
+        if num_colons == 2:
+            return re.fullmatch(r"\A[0-9]{1,2}:[0-9]{2}:[0-9]{2}\.[0-9]{2}\Z",
+                                time_str) is not None
+
+        return False
+
+    @staticmethod
+    def validate_behavior(behavior: str) -> bool:
+        """Check whether ``behavior`` is a valid behavior description
+
+        To be valid, ``behavior`` must be made exclusively of digits, letters,
+        and spaces.
+
+        >>> BehaviorFull.validate_behavior("Some behavior Description 3!")
+        False
+        >>> BehaviorFull.validate_behavior("Some behavior Description 3")
+        True
+        >>> BehaviorFull.validate_behavior("Some behavior Description 3 here")
+        True
+        >>> BehaviorFull.validate_behavior("Some behavior \\n Description 3!")
+        False
+
+        Args:
+            behavior: The potential behavior description to check
+
+        Returns: ``True`` if ``behavior`` is valid, ``False`` otherwise
+
+        """
+        return re.fullmatch(r"\A[0-9A-Za-z ]+\Z", behavior) is not None
+
+    @staticmethod
+    def validate_subject(subject: str) -> bool:
+        """Check whether ``subject`` is a valid subject element
+
+        To be valid, ``subject`` must be exactly ``either``
+
+        >>> BehaviorFull.validate_subject("either")
+        True
+        >>> BehaviorFull.validate_subject(" either")
+        False
+
+        Args:
+            subject: Potential subject element of a log to check
+
+        Returns: ``True`` if ``subject`` is valid, ``False`` otherwise
+
+        """
+        return subject == "either"

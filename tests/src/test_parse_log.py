@@ -18,8 +18,10 @@
 
 """
 
+import pytest
 from scorevideo_lib.parse_log import Log
 from scorevideo_lib.exceptions import FileFormatError
+from scorevideo_lib.parse_log import BehaviorFull
 
 TEST_RES = "tests/res"
 
@@ -234,3 +236,88 @@ def test_get_section_missing_header():
             assert str(error) == str(exp)
             failed = True
     assert failed
+
+# pragma pylint: disable=missing-docstring
+
+
+class TestBehaviorFull:
+    """Unit tests for the :py:class:BehaviorFull class
+
+    """
+
+    @staticmethod
+    def test_init_invalid_time_two_decimal_points():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0.05.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_raw_behavior():
+        with pytest.raises(TypeError):
+            BehaviorFull("53946     29:58.20     C")
+
+    @staticmethod
+    def test_init_invalid_time_no_decimal_points():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05:70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_no_description():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05.70              either")
+
+    @staticmethod
+    def test_init_invalid_negative_frame():
+        with pytest.raises(TypeError):
+            BehaviorFull("  -171     0:05.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_negative_time():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     -0:05.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_no_frame():
+        with pytest.raises(TypeError):
+            BehaviorFull("       0:05.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_no_time():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171         Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_no_either():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05.70    Pot entry exit          ")
+
+    @staticmethod
+    def test_init_invalid_one_space():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05.70 Pot entry exit          either")
+
+    @staticmethod
+    def test_init_invalid_5_elems():
+        with pytest.raises(TypeError):
+            BehaviorFull("|  171   0:05.70  Pot entry exit   either  ")
+
+    @staticmethod
+    def test_init_invalid_behavior():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05.70  Pot entry exit!          either")
+
+    @staticmethod
+    def test_init_invalid_subject():
+        with pytest.raises(TypeError):
+            BehaviorFull("  171     0:05.70  Pot entry exit          both")
+
+    @staticmethod
+    def test_init_valid_normal():
+        BehaviorFull("  171     28:52.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_valid_short_time():
+        BehaviorFull("  171     0:05.70    Pot entry exit          either")
+
+    @staticmethod
+    def test_init_valid_long_time():
+        BehaviorFull("  171     0:01:05.70    Pot entry exit          either")
