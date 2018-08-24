@@ -296,7 +296,7 @@ class BehaviorFull:
         >>> behav.frame
         1769
         >>> behav.time
-        datetime.timedelta(seconds=58, microseconds=970000)
+        datetime.timedelta(0, 58, 970000)
         >>> behav.description
         'Flee from male'
         >>> behav.subject
