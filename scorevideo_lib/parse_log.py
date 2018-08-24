@@ -41,7 +41,7 @@ class Log:
     # pylint: disable=too-many-instance-attributes
     # In this case, it is reasonable to have an instance attribute per section
 
-    def __init__(self, log_file):
+    def __init__(self, log_file) -> None:
         """Parse log file into its sections.
 
         Populate the attributes of the Log class by using the get_section_*
@@ -223,7 +223,7 @@ class Log:
         return Log.get_section(log_file, "MARKS", header, end)
 
     @staticmethod
-    def get_section(log_file, start: str, header: List[str], end: List[str]) \
+    def get_section(log_file, start: str, header: List[str], end: str) \
             -> List[str]:
         """Get an arbitrary section from a log file.
 
@@ -289,7 +289,7 @@ class BehaviorFull:
         subject: Always the string ``either``
     """
 
-    def __init__(self, behavior_line: str):
+    def __init__(self, behavior_line: str) -> None:
         """Create a new :py:class:`BehaviorFull` object from the provided line.
 
         >>> behav = BehaviorFull(" 1769  0:58.97  Flee from male  either ")

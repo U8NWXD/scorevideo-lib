@@ -5,3 +5,4 @@ venvScoreLib
 *.pyc
 .pytest_cache
 .coverage
+.mypy_cache
