@@ -275,82 +275,10 @@ class Log:
         return section
 
 
-class BehaviorFull:
-    """Store an interpreted representation of a behavior from the full section
+class SectionItem:
+    """Superclass for entries in a section of a log
 
-    Attributes:
-        frame: A positive integer representing the frame number on which the
-            behavior was scored.
-        time: A :py:class:timedelta object that represents the time elapsed
-            from the start of the clip to the behavior being scored. This is a
-            representation of the time listed in the log line.
-        description: The name of the behavior that appears as the second-to-last
-            element in the provided line
-        subject: Always the string ``either``
     """
-
-    def __init__(self, behavior_line: str) -> None:
-        """Create a new :py:class:`BehaviorFull` object from the provided line.
-
-        >>> behav = BehaviorFull(" 1769  0:58.97  Flee from male  either ")
-        >>> behav.frame
-        1769
-        >>> behav.time
-        datetime.timedelta(0, 58, 970000)
-        >>> behav.description
-        'Flee from male'
-        >>> behav.subject
-        'either'
-
-        Args:
-            behavior_line: A line from the ``FULL LOG`` section of a log file
-        Returns:
-            None
-        Raises:
-            TypeError: When the provided line does not conform to the
-                expected format. Notably, all 4 elements of the line must be
-                separated from each other by at least 2 spaces.
-        """
-        split = re.split(r"\s{2,}", behavior_line)
-        split[0] = split[0].lstrip()
-        split[-1] = split[-1].rstrip()
-        line = [elem for elem in split if elem != ""]
-        line_error = "The line '" + behavior_line + "' is not a valid line " \
-                                                    "from the FULL LOG section"
-        if len(line) > 4:
-            err = "{} (num elements: {} > 4)".format(line_error, len(line))
-            raise TypeError(err)
-        elif len(line) < 4:
-            err = "{} (num elements: {} < 4)".format(line_error, len(line))
-            raise TypeError(err)
-        elif not BehaviorFull.validate_frame(line[0]):
-            err = "{} ('{}' is not a valid frame number)".format(line_error,
-                                                                 line[0])
-            raise TypeError(err)
-        elif not BehaviorFull.validate_time(line[1]):
-            err = "{} ('{}' is not a valid time)".format(line_error, line[1])
-            raise TypeError(err)
-        elif not BehaviorFull.validate_behavior(line[2]):
-            err = "{} ('{}' is not a valid behavior)".format(line_error,
-                                                             line[2])
-            raise TypeError(err)
-        elif not BehaviorFull.validate_subject(line[3]):
-            err = "{} ('{}' is not a valid subject)".format(line_error, line[3])
-            raise TypeError(err)
-
-        self.frame = int(line[0])
-        split_time = line[1].split(":")
-        secs = float(split_time[-1])
-        # MM:SS.SS -> [MM, SS.SS]
-        if len(split_time) == 2:
-            secs += int(split_time[0]) * 60
-        # HH:MM:SS.SS -> [HH, MM, SS.SS]
-        elif len(split_time) == 3:
-            secs += int(split_time[0]) * 60 * 60
-            secs += int(split_time[1]) * 60
-        self.time = timedelta(seconds=secs)
-        self.description = line[2]
-        self.subject = line[3]
 
     @staticmethod
     def validate_frame(frame: str) -> bool:
@@ -359,15 +287,15 @@ class BehaviorFull:
         A valid frame number is any non-negative integer. Specifically, any
         ``frame`` that is composed solely of one or more digits 0-9 is accepted.
 
-        >>> BehaviorFull.validate_frame("-5")
+        >>> SectionItem.validate_frame("-5")
         False
-        >>> BehaviorFull.validate_frame("05")
+        >>> SectionItem.validate_frame("05")
         True
-        >>> BehaviorFull.validate_frame("hi5")
+        >>> SectionItem.validate_frame("hi5")
         False
-        >>> BehaviorFull.validate_frame("50")
+        >>> SectionItem.validate_frame("50")
         True
-        >>> BehaviorFull.validate_frame(" 50 ")
+        >>> SectionItem.validate_frame(" 50 ")
         False
 
         Args:
@@ -409,28 +337,139 @@ class BehaviorFull:
         return False
 
     @staticmethod
-    def validate_behavior(behavior: str) -> bool:
-        """Check whether ``behavior`` is a valid behavior description
+    def validate_description(desc: str) -> bool:
+        """Check whether ``desc`` is a valid behavior description
 
-        To be valid, ``behavior`` must be made exclusively of digits, letters,
+        To be valid, ``desc`` must be made exclusively of digits, letters,
         and spaces.
 
-        >>> BehaviorFull.validate_behavior("Some behavior Description 3!")
+        >>> SectionItem.validate_description("Some Description 3!")
         False
-        >>> BehaviorFull.validate_behavior("Some behavior Description 3")
+        >>> SectionItem.validate_description("Some Description 3")
         True
-        >>> BehaviorFull.validate_behavior("Some behavior Description 3 here")
+        >>> SectionItem.validate_description("Some Description 3 here")
         True
-        >>> BehaviorFull.validate_behavior("Some behavior \\n Description 3!")
+        >>> SectionItem.validate_description("Some \\n Description 3!")
         False
 
         Args:
-            behavior: The potential behavior description to check
+            desc: The potential behavior description to check
 
-        Returns: ``True`` if ``behavior`` is valid, ``False`` otherwise
+        Returns: ``True`` if ``desc`` is valid, ``False`` otherwise
 
         """
-        return re.fullmatch(r"\A[0-9A-Za-z ]+\Z", behavior) is not None
+        return re.fullmatch(r"\A[0-9A-Za-z ]+\Z", desc) is not None
+
+    @staticmethod
+    def split_line(line: str) -> List[str]:
+        """Split a Log file line in a section into its elements
+
+        Elements must be separated by at least two spaces
+
+        >>> SectionItem.split_line("  hi  4  test   >?why    my4 j   ")
+        ['hi', '4', 'test', '>?why', 'my4 j']
+
+        Args:
+            line: Line to split
+
+        Returns: A list of the elements in the provided line
+
+        """
+        split = re.split(r"\s{2,}", line)
+        split[0] = split[0].lstrip()
+        split[-1] = split[-1].rstrip()
+        return [elem for elem in split if elem != ""]
+
+    @staticmethod
+    def str_to_timedelta(time_str: str) -> timedelta:
+        """Convert a string representation of a time into a :py:class:timedelta
+
+        >>> SectionItem.str_to_timedelta("30:00.03")
+        datetime.timedelta(0, 1800, 30000)
+
+        Args:
+            time_str: String representation of the time or duration
+
+        Returns: :py:class:timedelta object that represents the same duration
+            or time as ``time_str`` does.
+
+        """
+        split_time = time_str.split(":")
+        secs = float(split_time[-1])
+        # MM:SS.SS -> [MM, SS.SS]
+        if len(split_time) == 2:
+            secs += int(split_time[0]) * 60
+        # HH:MM:SS.SS -> [HH, MM, SS.SS]
+        elif len(split_time) == 3:
+            secs += int(split_time[0]) * 60 * 60
+            secs += int(split_time[1]) * 60
+        return timedelta(seconds=secs)
+
+
+class BehaviorFull(SectionItem):
+    """Store an interpreted representation of a behavior from the full section
+
+    Attributes:
+        frame: A positive integer representing the frame number on which the
+            behavior was scored.
+        time: A :py:class:timedelta object that represents the time elapsed
+            from the start of the clip to the behavior being scored. This is a
+            representation of the time listed in the log line.
+        description: The name of the behavior that appears as the second-to-last
+            element in the provided line
+        subject: Always the string ``either``
+    """
+
+    def __init__(self, behavior_line: str) -> None:
+        """Create a new :py:class:`BehaviorFull` object from the provided line.
+
+        >>> behav = BehaviorFull(" 1769  0:58.97  Flee from male  either ")
+        >>> behav.frame
+        1769
+        >>> behav.time
+        datetime.timedelta(0, 58, 970000)
+        >>> behav.description
+        'Flee from male'
+        >>> behav.subject
+        'either'
+
+        Args:
+            behavior_line: A line from the ``FULL LOG`` section of a log file
+        Returns:
+            None
+        Raises:
+            TypeError: When the provided line does not conform to the
+                expected format. Notably, all 4 elements of the line must be
+                separated from each other by at least 2 spaces.
+        """
+        line = SectionItem.split_line(behavior_line)
+        line_error = "The line '" + behavior_line + "' is not a valid line " \
+                                                    "from the FULL LOG section"
+        if len(line) > 4:
+            err = "{} (num elements: {} > 4)".format(line_error, len(line))
+            raise TypeError(err)
+        elif len(line) < 4:
+            err = "{} (num elements: {} < 4)".format(line_error, len(line))
+            raise TypeError(err)
+        elif not SectionItem.validate_frame(line[0]):
+            err = "{} ('{}' is not a valid frame number)".format(line_error,
+                                                                 line[0])
+            raise TypeError(err)
+        elif not SectionItem.validate_time(line[1]):
+            err = "{} ('{}' is not a valid time)".format(line_error, line[1])
+            raise TypeError(err)
+        elif not SectionItem.validate_description(line[2]):
+            err = "{} ('{}' is not a valid behavior)".format(line_error,
+                                                             line[2])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_subject(line[3]):
+            err = "{} ('{}' is not a valid subject)".format(line_error, line[3])
+            raise TypeError(err)
+
+        self.frame = int(line[0])
+        self.time = SectionItem.str_to_timedelta(line[1])
+        self.description = line[2]
+        self.subject = line[3]
 
     @staticmethod
     def validate_subject(subject: str) -> bool:
@@ -452,13 +491,40 @@ class BehaviorFull:
         return subject == "either"
 
 
-class Mark:
+class Mark(SectionItem):
+    """Store a ``mark`` from the ``MARKS`` section
+
+    Attributes:
+        frame: A positive integer representing the frame number at which the
+            mark is placed
+        time: A :py:class:timedelta object that represents the time elapsed
+            from the start of the clip to the mark. This is a
+            representation of the time listed in the log line.
+        name: Name of the mark that describes its meaning
+    """
 
     def __init__(self, line: str) -> None:
-        split = re.split(r"\s{2,}", line)
-        split[0] = split[0].lstrip()
-        split[-1] = split[-1].rstrip()
-        elems = [elem for elem in split if elem != ""]
+        """Create a new :py:class:Mark from a provided line from the log file
+
+        >>> behav = Mark("54001    30:00.03    video end")
+        >>> behav.frame
+        54001
+        >>> behav.time
+        datetime.timedelta(0, 1800, 30000)
+        >>> behav.name
+        'video end'
+
+        Args:
+            line: A line from the ``MARKS`` section of a log file
+        Returns:
+            None
+        Raises:
+            TypeError: When the provided line does not conform to the
+                expected format. Notably, all 3 elements of the line must be
+                separated from each other by at least 2 spaces.
+
+        """
+        elems = SectionItem.split_line(line)
         line_error = "The line '{}' is not a valid line from the MARKS section"\
             .format(line)
         if len(elems) < 3:
@@ -467,28 +533,16 @@ class Mark:
         elif len(elems) > 3:
             err = "{} (num elements: {} > 3)".format(line_error, len(elems))
             raise TypeError(err)
-        # TODO: Refactor validation to separate "Section" superclass
-        elif not BehaviorFull.validate_frame(elems[0]):
+        elif not SectionItem.validate_frame(elems[0]):
             err = "{} (frame '{}' is not valid)".format(line_error, elems[0])
             raise TypeError(err)
-        elif not BehaviorFull.validate_time(elems[1]):
+        elif not SectionItem.validate_time(elems[1]):
             err = "{} (time '{}' is not valid)".format(line_error, elems[1])
             raise TypeError(err)
-        elif not BehaviorFull.validate_behavior(elems[2]):
+        elif not SectionItem.validate_description(elems[2]):
             err = "{} (mark name '{}' is invalid)".format(line_error, elems[2])
             raise TypeError(err)
 
         self.frame = int(elems[0])
-        # TODO: Copied from BehaviorFull, refactor to re-use
-        split_time = elems[1].split(":")
-        secs = float(split_time[-1])
-        # MM:SS.SS -> [MM, SS.SS]
-        if len(split_time) == 2:
-            secs += int(split_time[0]) * 60
-        # HH:MM:SS.SS -> [HH, MM, SS.SS]
-        elif len(split_time) == 3:
-            secs += int(split_time[0]) * 60 * 60
-            secs += int(split_time[1]) * 60
-        self.time = timedelta(seconds=secs)
-
+        self.time = SectionItem.str_to_timedelta(elems[1])
         self.name = elems[2]
