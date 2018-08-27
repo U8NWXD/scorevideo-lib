@@ -450,3 +450,45 @@ class BehaviorFull:
 
         """
         return subject == "either"
+
+
+class Mark:
+
+    def __init__(self, line: str) -> None:
+        split = re.split(r"\s{2,}", line)
+        split[0] = split[0].lstrip()
+        split[-1] = split[-1].rstrip()
+        elems = [elem for elem in split if elem != ""]
+        line_error = "The line '{}' is not a valid line from the MARKS section"\
+            .format(line)
+        if len(elems) < 3:
+            err = "{} (num elements: {} < 3)".format(line_error, len(elems))
+            raise TypeError(err)
+        elif len(elems) > 3:
+            err = "{} (num elements: {} > 3)".format(line_error, len(elems))
+            raise TypeError(err)
+        # TODO: Refactor validation to separate "Section" superclass
+        elif not BehaviorFull.validate_frame(elems[0]):
+            err = "{} (frame '{}' is not valid)".format(line_error, elems[0])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_time(elems[1]):
+            err = "{} (time '{}' is not valid)".format(line_error, elems[1])
+            raise TypeError(err)
+        elif not BehaviorFull.validate_behavior(elems[2]):
+            err = "{} (mark name '{}' is invalid)".format(line_error, elems[2])
+            raise TypeError(err)
+
+        self.frame = int(elems[0])
+        # TODO: Copied from BehaviorFull, refactor to re-use
+        split_time = elems[1].split(":")
+        secs = float(split_time[-1])
+        # MM:SS.SS -> [MM, SS.SS]
+        if len(split_time) == 2:
+            secs += int(split_time[0]) * 60
+        # HH:MM:SS.SS -> [HH, MM, SS.SS]
+        elif len(split_time) == 3:
+            secs += int(split_time[0]) * 60 * 60
+            secs += int(split_time[1]) * 60
+        self.time = timedelta(seconds=secs)
+
+        self.name = elems[2]
