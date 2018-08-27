@@ -503,15 +503,21 @@ class Mark(SectionItem):
         name: Name of the mark that describes its meaning
     """
 
-    def __init__(self, line: str) -> None:
+    def __init__(self, frame: int, time: timedelta, name: str) -> None:
+        self.frame = frame
+        self.time = time
+        self.name = name
+
+    @classmethod
+    def from_line(cls, line: str) -> "Mark":
         """Create a new :py:class:Mark from a provided line from the log file
 
-        >>> behav = Mark("54001    30:00.03    video end")
-        >>> behav.frame
+        >>> mark = Mark.from_line("54001    30:00.03    video end")
+        >>> mark.frame
         54001
-        >>> behav.time
+        >>> mark.time
         datetime.timedelta(0, 1800, 30000)
-        >>> behav.name
+        >>> mark.name
         'video end'
 
         Args:
@@ -543,6 +549,8 @@ class Mark(SectionItem):
             err = "{} (mark name '{}' is invalid)".format(line_error, elems[2])
             raise TypeError(err)
 
-        self.frame = int(elems[0])
-        self.time = SectionItem.str_to_timedelta(elems[1])
-        self.name = elems[2]
+        frame = int(elems[0])
+        time = SectionItem.str_to_timedelta(elems[1])
+        name = elems[2]
+
+        return cls(frame, time, name)

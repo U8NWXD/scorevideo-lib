@@ -18,64 +18,96 @@
 
 """
 
+from datetime import timedelta
 import pytest
 from scorevideo_lib.parse_log import Mark
 
 # pragma pylint: disable=missing-docstring
 
 
+def test_from_line_valid_start():
+    mark = Mark.from_line("    1     0:00.03    video start")
+    assert mark.frame == 1
+    assert mark.time == timedelta(seconds=0.03)
+    assert mark.name == "video start"
+
+
+def test_from_line_valid_end():
+    mark = Mark.from_line("54001    30:00.03    video end")
+    assert mark.frame == 54001
+    assert mark.time == timedelta(seconds=1800.03)
+    assert mark.name == "video end"
+
+
+def test_from_line_invalid_two_spaces_in_name():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:00.03    video  start")
+
+
+def test_from_line_invalid_one_space_after_time():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:00.03 video start")
+
+
+def test_from_line_invalid_one_space_after_frame():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1 0:00.03    video start")
+
+
+def test_from_line_invalid_time_no_period():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:00:03    video start")
+
+
+def test_from_line_invalid_time_two_periods():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0.00.03    video start")
+
+
+def test_from_line_invalid_time_one_middle_digit():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:0.03    video start")
+
+
+def test_from_line_invalid_time_negative():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     -0:00.03    video start")
+
+
+def test_from_line_invalid_negative_frame():
+    with pytest.raises(TypeError):
+        Mark.from_line("    -1     0:00.03    video start")
+
+
+def test_from_line_invalid_name():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:00.03    video start!")
+
+
+def test_from_line_valid_long_time():
+    mark = Mark.from_line("    1     01:20:04.03    video start")
+    assert mark.frame == 1
+    assert mark.time == timedelta(seconds=(1 * 60 * 60 + 20 * 60 + 4.03))
+    assert mark.name == "video start"
+
+
 def test_init_valid_start():
-    Mark("    1     0:00.03    video start")
+    mark = Mark(1, timedelta(seconds=0.03), "video start")
+    assert mark.frame == 1
+    assert mark.time == timedelta(seconds=0.03)
+    assert mark.name == "video start"
 
 
 def test_init_valid_end():
-    Mark("54001    30:00.03    video end")
-
-
-def test_init_invalid_two_spaces_in_name():
-    with pytest.raises(TypeError):
-        Mark("    1     0:00.03    video  start")
-
-
-def test_init_invalid_one_space_after_time():
-    with pytest.raises(TypeError):
-        Mark("    1     0:00.03 video start")
-
-
-def test_init_invalid_one_space_after_frame():
-    with pytest.raises(TypeError):
-        Mark("    1 0:00.03    video start")
-
-
-def test_init_invalid_time_no_period():
-    with pytest.raises(TypeError):
-        Mark("    1     0:00:03    video start")
-
-
-def test_init_invalid_time_two_periods():
-    with pytest.raises(TypeError):
-        Mark("    1     0.00.03    video start")
-
-
-def test_init_invalid_time_one_middle_digit():
-    with pytest.raises(TypeError):
-        Mark("    1     0:0.03    video start")
-
-
-def test_init_invalid_time_negative():
-    with pytest.raises(TypeError):
-        Mark("    1     -0:00.03    video start")
-
-
-def test_init_invalid_negative_frame():
-    with pytest.raises(TypeError):
-        Mark("    -1     0:00.03    video start")
-
-
-def test_init_invalid_name():
-    with pytest.raises(TypeError):
-        Mark("    1     0:00.03    video start!")
+    mark = Mark(54001, timedelta(seconds=(30 * 60 + 0.03)), "video end")
+    assert mark.frame == 54001
+    assert mark.time == timedelta(seconds=(30 * 60 + 0.03))
+    assert mark.name == "video end"
 
 
 def test_init_valid_long_time():
-    Mark("    1     01:20:04.03    video start")
+    mark = Mark(1, timedelta(seconds=(1 * 60 * 60 + 20 * 60 + 4.03)),
+                "video start")
+    assert mark.frame == 1
+    assert mark.time == timedelta(seconds=(1 * 60 * 60 + 20 * 60 + 4.03))
+    assert mark.name == "video start"
