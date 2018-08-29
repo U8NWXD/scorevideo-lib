@@ -21,6 +21,7 @@
 from typing import List
 import re
 from datetime import timedelta
+from datetime import datetime
 from scorevideo_lib.exceptions import FileFormatError
 
 
@@ -554,3 +555,72 @@ class Mark(SectionItem):
         name = elems[2]
 
         return cls(frame, time, name)
+
+    def to_line(self, other_line: str) -> str:
+        """Converts a :py:class:Mark object into a log line in the MARKS section
+
+        ``other_line`` is used as a template. It should come from the log file
+        the returned line will be inserted into. Only loose error checking is
+        performed, and invalid lines may produce undefined output. Similarly,
+        if the constructed line cannot fit into the format prescribed by
+        ``other_line``, the output is undefined.
+
+        >>> mark = Mark(734, timedelta(seconds=1800.07), "video end")
+        >>> mark.to_line("  1    0:00.03    video start")
+        '734   30:00.07    video end'
+
+        Args:
+            other_line: A line from the MARKS section into which the resulting
+                string could be inserted. This defines the format this method
+                will attempt to match.
+
+        Returns: A log line that could be inserted into the MARKS section of
+            the log from which ``other_line`` came.
+
+        Raises:
+            ValueError: Raised if ``other_line`` is invalid or the mark's time
+                is greater than 1 day
+
+        """
+        match = re.search(r"\A(\s*\S+)(\s{2,}\S+)(\s{2,})(?:\S+\s*)+",
+                          other_line)
+        if match is None:
+            err = "other_line '{}' is not a valid line from the LOG section".\
+                format(other_line)
+            raise ValueError(err)
+        # match.group(n) returns the string in other_line that was matched by
+        # the n-th parenthesized group in the regular expression. Note that
+        # `(?: ... )` does not count as a group in this context
+        frame_col_width = len(match.group(1))
+        time_col_width = len(match[2])
+        time_name_sep_width = len(match[3])
+
+        time = datetime.utcfromtimestamp(self.time.total_seconds())
+        if abs(self.time) < timedelta(seconds=60):
+            # Under 1 minute (all can be expressed in secs microsecs)
+            time_str = "0:" + time.strftime("%S.%f")
+        elif abs(self.time) < timedelta(seconds=60 * 60):
+            # Under 1 hour (all can be expressed in mins, secs, microsecs)
+            time_str = time.strftime("%M:%S.%f")
+            if time_str[0] == "0":
+                time_str = time_str[1:]
+        elif abs(self.time) < timedelta(days=1):
+            # Under 1 day (all can be expressed in hrs, mins, secs, microsecs)
+            time_str = time.strftime("%H:%M:%S.%f")
+            if time_str[0] == "0":
+                time_str = time_str[1:]
+        else:
+            raise ValueError("The duration '{}' is too long (must be < 1 day)"
+                             .format(str(self.time)))
+
+        # Truncate time_str to cut off all but 2 most significant decimal places
+        time_str = time_str[:time_str.index(".") + 3]
+
+        # Creates a template like "{0:>frame_col_width}{1:>time_col_width}  {2}"
+        # Both the frame and time columns are right-justified and of lengths
+        # fixed by the variables frame_col_width and time_col_width. 0, 1, and 2
+        # are indices that define the locations to fill each arg of .format(...)
+        template = "{0:>" + str(frame_col_width) + "}{1:>" + \
+                   str(time_col_width) + "}" + (" " * time_name_sep_width) + \
+                   "{2}"
+        return template.format(self.frame, time_str, self.name)

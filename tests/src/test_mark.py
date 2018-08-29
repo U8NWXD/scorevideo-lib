@@ -111,3 +111,89 @@ def test_init_valid_long_time():
     assert mark.frame == 1
     assert mark.time == timedelta(seconds=(1 * 60 * 60 + 20 * 60 + 4.03))
     assert mark.name == "video start"
+
+
+def test_to_line_valid_start_end_is_template():
+    start = "    1     0:00.03    video start"
+    end = "54001    30:00.03    video end"
+    mark = Mark.from_line(start)
+    assert mark.to_line(end) == start
+
+
+def test_to_line_valid_end_start_is_template():
+    start = "    1     0:00.03    video start"
+    end = "54001    30:00.03    video end"
+    mark = Mark.from_line(end)
+    assert mark.to_line(start) == end
+
+
+def test_to_line_valid_hours():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=3650.05), "weird mark")
+    assert mark.to_line(temp) == "    17  1:00:50.05    weird mark"
+
+
+def test_to_line_valid_secs():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=4.05), "weird mark")
+    assert mark.to_line(temp) == "    17     0:04.05    weird mark"
+
+
+def test_to_line_valid_microsecs():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=0.05), "weird mark")
+    assert mark.to_line(temp) == "    17     0:00.05    weird mark"
+
+
+def test_to_line_valid_long_frame():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(143063, timedelta(seconds=4.05), "weird mark")
+    assert mark.to_line(temp) == "143063     0:04.05    weird mark"
+
+
+def test_to_line_valid_one_word_name():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=4.05), "mark")
+    assert mark.to_line(temp) == "    17     0:04.05    mark"
+
+
+def test_to_line_valid_one_word_name_in_template():
+    temp = " 54001    30:00.03    videoend"
+    mark = Mark(17, timedelta(seconds=4.05), "weird mark")
+    assert mark.to_line(temp) == "    17     0:04.05    weird mark"
+
+
+def test_to_line_valid_long_frame_in_template():
+    temp = "154001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=4.05), "weird mark")
+    assert mark.to_line(temp) == "    17     0:04.05    weird mark"
+
+
+def test_to_line_invalid_template_1_space_after_frame():
+    with pytest.raises(ValueError):
+        mark = Mark(1, timedelta(seconds=1), "mark")
+        mark.to_line("    1 0:00.03    video start")
+
+
+def test_to_line_invalid_template_1_space_after_time():
+    with pytest.raises(ValueError):
+        mark = Mark(1, timedelta(seconds=1), "mark")
+        mark.to_line("    1     0:00.03 video start")
+
+
+def test_to_line_invalid_time_over_1_day():
+    with pytest.raises(ValueError):
+        mark = Mark(17, timedelta(days=1.05), "weird mark")
+        mark.to_line(" 54001    30:00.03    video end")
+
+
+def test_to_line_valid_remove_leading_zero_minutes():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=61.05), "weird mark")
+    assert mark.to_line(temp) == "    17     1:01.05    weird mark"
+
+
+def test_to_line_valid_remove_leading_zero_hours():
+    temp = " 54001    30:00.03    video end"
+    mark = Mark(17, timedelta(seconds=3601.05), "weird mark")
+    assert mark.to_line(temp) == "    17  1:00:01.05    weird mark"
