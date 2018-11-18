@@ -27,17 +27,43 @@ from scorevideo_lib.exceptions import FileFormatError
 
 
 class Log:
+    """Store a parsed version of a log file
+
+    This version stores only the information contained in the log, not any
+    information tied to a particular file (e.g. file name, reference to file,
+    number of spaces separating columns).
+
+    Attributes:
+        full: A list of :py:class:`BehaviorFull` objects, each representing a
+            line from the log file's ``FULL`` section
+        marks: A list of :py:class:`Mark` objects, each representing a mark from
+            the log file
+
+    """
     def __init__(self) -> None:
+        """Initialize instance attributes as ``None``
+
+        """
         # self.header = None
         # self.video_info = None
         # self.commands = None
         # self.raw = None
-        self.full = None  # type: List[BehaviorFull]
+        temp_behav = [BehaviorFull(" 0  00:00.00  null  either ")]
+        self.full = temp_behav  # type: List[BehaviorFull]
         # self.notes = None
-        self.marks = None  # type:  List[Mark]
+        self.marks = [Mark(0, timedelta(0), "")]  # type:  List[Mark]
 
     @classmethod
     def from_log(cls, log: "Log") -> "Log":
+        """Create a :py:class:`Log` object from another :py:class:`Log` object
+
+        Args:
+            log: The object to copy
+
+        Returns:
+            A copy of the ``log`` parameter
+
+        """
         new_log = Log()
         # new_log.header = log.header
         # new_log.video_info = log.video_info
@@ -50,6 +76,18 @@ class Log:
 
     @classmethod
     def from_raw_log(cls, log: "RawLog") -> "Log":
+        """Create a :py:class:`Log`` from a :py:class:`RawLog` object
+
+        In the process, the log lines are parsed into their respective objects.
+        This process is lossy.
+
+        Args:
+            log: The object to parse and to create the object from
+
+        Returns:
+            A parsed version of ``log``
+
+        """
         new_log = Log()
 
         new_log.full = [BehaviorFull(line) for line in log.full]
@@ -59,10 +97,25 @@ class Log:
 
     @classmethod
     def from_file(cls, log_file) -> "Log":
+        """Create a :py:class:`Log` object from a file
+
+        Args:
+            log_file: File to read from
+
+        Returns:
+            A parsed representation of ``log_file``
+
+        """
         raw = RawLog.from_file(log_file)
         return cls.from_raw_log(raw)
 
     def sort_lists(self) -> None:
+        """Sort the lists of parsed material as applicable
+
+        Returns:
+            None
+
+        """
         self.marks.sort()
         self.full.sort()
 
@@ -119,7 +172,15 @@ class RawLog:
 
     @classmethod
     def from_raw_log(cls, raw_log: "RawLog") -> "RawLog":
+        """Make a copy of a :py:class:`RawLog` object by copying each attribute
 
+        Args:
+            raw_log: Object to copy
+
+        Returns:
+            Copy of ``raw_log``
+
+        """
         new_log = RawLog()
 
         new_log.header = raw_log.header
@@ -725,6 +786,21 @@ class Mark(SectionItem):
         return template.format(self.frame, time_str, self.name)
 
     def __lt__(self, other: "Mark"):
+        """Determine if one :py:class:`Mark` is less than another
+
+        Ordering is performed with the ``<`` operator on the class's attributes
+        in the following descending order of priority:
+        * :py:attr:`Mark.frame`
+        * :py:attr:`Mark.time`
+        * :py:attr:`Mark.name`
+
+        Args:
+            other: The :py:class:`Mark` to compare to ``self``
+
+        Returns:
+            ``True`` if and only if ``self`` comes before ``other``
+
+        """
         if self.frame != other.frame:
             return self.frame < other.frame
         if self.time != other.time:
@@ -734,10 +810,13 @@ class Mark(SectionItem):
         return False
 
     def __repr__(self):
+        # pylint: disable=missing-docstring
         return str(self.__dict__)
 
     def __str__(self):
+        # pylint: disable=missing-docstring
         return self.__repr__()
 
     def __eq__(self, other):
+        # pylint: disable=missing-docstring
         return self.__repr__() == other.__repr__()
