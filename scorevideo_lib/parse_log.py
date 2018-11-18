@@ -26,6 +26,43 @@ from scorevideo_lib.exceptions import FileFormatError
 
 
 class Log:
+    def __init__(self) -> None:
+        # self.header = None
+        # self.video_info = None
+        # self.commands = None
+        # self.raw = None
+        self.full = None  # type: List[BehaviorFull]
+        # self.notes = None
+        self.marks = None  # type:  List[Mark]
+
+    @classmethod
+    def from_log(cls, log: "Log") -> "Log":
+        new_log = Log()
+        # new_log.header = log.header
+        # new_log.video_info = log.video_info
+        # new_log.commands = log.commands
+        # new_log.raw = log.raw
+        new_log.full = log.full
+        # new_log.notes = log.notes
+        new_log.marks = log.marks
+        return new_log
+
+    @classmethod
+    def from_raw_log(cls, log: "RawLog") -> "Log":
+        new_log = Log()
+
+        new_log.full = [BehaviorFull(line) for line in log.full]
+        new_log.marks = [Mark.from_line(line) for line in log.marks]
+
+        return new_log
+
+    @classmethod
+    def from_file(cls, log_file) -> "Log":
+        raw = RawLog.from_file(log_file)
+        return cls.from_raw_log(raw)
+
+
+class RawLog:
     """Store an interpreted form of a log file and perform operations on it
 
     Attributes:
@@ -42,24 +79,53 @@ class Log:
     # pylint: disable=too-many-instance-attributes
     # In this case, it is reasonable to have an instance attribute per section
 
-    def __init__(self, log_file) -> None:
+    def __init__(self) -> None:
+        self.header = [""]  # type: List[str]
+        self.video_info = [""]  # type: List[str]
+        self.commands = [""]  # type: List[str]
+        self.raw = [""]  # type: List[str]
+        self.full = [""]  # type: List[str]
+        self.notes = [""]  # type: List[str]
+        self.marks = [""]  # type: List[str]
+
+    @classmethod
+    def from_file(cls, log_file) -> "RawLog":
         """Parse log file into its sections.
 
-        Populate the attributes of the Log class by using the get_section_*
+        Populate the attributes of the RawLog class by using the get_section_*
         static methods to extract sections that are stored in attributes.
 
         Args:
             log_file: An open file object that points to the log file to read.
         """
-        self.log_file = log_file
-        self.header = Log.get_section_header(log_file)
-        self.video_info = Log.get_section_video_info(log_file)
-        self.commands = Log.get_section_commands(log_file)
-        self.raw = Log.get_section_raw(log_file)
-        self.full = Log.get_section_full(log_file)
-        self.notes = Log.get_section_notes(log_file)
-        self.marks = Log.get_section_marks(log_file)
+
+        log = RawLog()
+
+        log.header = RawLog.get_section_header(log_file)
+        log.video_info = RawLog.get_section_video_info(log_file)
+        log.commands = RawLog.get_section_commands(log_file)
+        log.raw = RawLog.get_section_raw(log_file)
+        log.full = RawLog.get_section_full(log_file)
+        log.notes = RawLog.get_section_notes(log_file)
+        log.marks = RawLog.get_section_marks(log_file)
         log_file.seek(0)
+
+        return log
+
+    @classmethod
+    def from_raw_log(cls, raw_log: "RawLog") -> "RawLog":
+
+        new_log = RawLog()
+
+        new_log.header = raw_log.header
+        new_log.video_info = raw_log.video_info
+        new_log.commands = raw_log.commands
+        new_log.raw = raw_log.raw
+        new_log.full = raw_log.full
+        new_log.notes = raw_log.notes
+        new_log.marks = raw_log.marks
+
+        return new_log
 
     @staticmethod
     def get_section_header(log_file) -> List[str]:
@@ -103,7 +169,7 @@ class Log:
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        return Log.get_section(log_file, "VIDEO FILE SET", [], "")
+        return RawLog.get_section(log_file, "VIDEO FILE SET", [], "")
 
     @staticmethod
     def get_section_commands(log_file) -> List[str]:
@@ -127,8 +193,8 @@ class Log:
                   "start|stop|subject|description",
                   "-------------------------------"]
         end = "-------------------------------"
-        return Log.get_section(log_file, "COMMAND SET AND SETTINGS", header,
-                               end)
+        return RawLog.get_section(log_file, "COMMAND SET AND SETTINGS", header,
+                                  end)
 
     @staticmethod
     def get_section_raw(log_file) -> List[str]:
@@ -152,7 +218,7 @@ class Log:
                   "frame|time(min:sec)|command",
                   "------------------------------------------"]
         end = "------------------------------------------"
-        return Log.get_section(log_file, "RAW LOG", header, end)
+        return RawLog.get_section(log_file, "RAW LOG", header, end)
 
     @staticmethod
     def get_section_full(log_file) -> List[str]:
@@ -176,7 +242,7 @@ class Log:
                   "frame|time(min:sec)|description|action|subject",
                   "------------------------------------------"]
         end = "------------------------------------------"
-        return Log.get_section(log_file, "FULL LOG", header, end)
+        return RawLog.get_section(log_file, "FULL LOG", header, end)
 
     @staticmethod
     def get_section_notes(log_file) -> List[str]:
@@ -197,7 +263,7 @@ class Log:
         """
         end = "------------------------------------------"
         header = ["------------------------------------------"]
-        return Log.get_section(log_file, "NOTES", header, end)
+        return RawLog.get_section(log_file, "NOTES", header, end)
 
     @staticmethod
     def get_section_marks(log_file) -> List[str]:
@@ -221,7 +287,7 @@ class Log:
                   "frame|time(min:sec)|mark name",
                   "------------------------------------------"]
         end = "------------------------------------------"
-        return Log.get_section(log_file, "MARKS", header, end)
+        return RawLog.get_section(log_file, "MARKS", header, end)
 
     @staticmethod
     def get_section(log_file, start: str, header: List[str], end: str) \
@@ -363,7 +429,7 @@ class SectionItem:
 
     @staticmethod
     def split_line(line: str) -> List[str]:
-        """Split a Log file line in a section into its elements
+        """Split a RawLog file line in a section into its elements
 
         Elements must be separated by at least two spaces
 

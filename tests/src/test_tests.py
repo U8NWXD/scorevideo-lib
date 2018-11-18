@@ -42,7 +42,7 @@ def return_file_read(_):
     """Return the lines expected to be found in the file_read test file.
 
     Args:
-        _: Present to mimic the behavior of Log.get_section_* functions, but not
+        _: Present to mimic the behavior of RawLog.get_section_* functions, but not
             used by the function
 
     Returns: A list of the lines in file_read.txt with trailing whitespace

@@ -14,20 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test the Log class
+"""Test the RawLog class
 
 """
 
-from scorevideo_lib.parse_log import Log
+from scorevideo_lib.parse_log import RawLog
 from scorevideo_lib.exceptions import FileFormatError
 
 TEST_RES = "tests/res"
 
 
 def test_constructor_all():
-    """Test creating a Log object from a full log
+    """Test creating a RawLog object from a full log
 
-    Creates a Log object from a full test log (all.txt) and then compares the
+    Creates a RawLog object from a full test log (all.txt) and then compares the
     resulting object's attributes to the contents of the files in
     expectedLogParts.
 
@@ -35,7 +35,7 @@ def test_constructor_all():
 
     """
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as log_all:
-        log = Log(log_all)
+        log = RawLog.from_file(log_all)
 
     tests = [("header.txt", log.header), ("video_info.txt", log.video_info),
              ("comm.txt", log.commands), ("raw.txt", log.raw),
@@ -49,9 +49,9 @@ def test_constructor_all():
 
 
 def test_constructor_no_notes():
-    """Test creating a Log object from a log with no notes
+    """Test creating a RawLog object from a log with no notes
 
-        Creates a Log object from a test log without notes(noNotes.txt) and then
+        Creates a RawLog object from a test log without notes(noNotes.txt) and then
         compares the resulting object's attributes to the contents of the files
         in expectedLogParts.
 
@@ -59,7 +59,7 @@ def test_constructor_no_notes():
 
         """
     with open(TEST_RES + "/realisticLogs/noNotes.txt", 'r') as log_all:
-        log = Log(log_all)
+        log = RawLog.from_file(log_all)
 
     tests = [("header.txt", log.header), ("video_info.txt", log.video_info),
              ("comm.txt", log.commands), ("raw.txt", log.raw),
@@ -97,7 +97,7 @@ def test_get_section_header_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/header.txt",
-                                   Log.get_section_header,
+                                   RawLog.get_section_header,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -110,7 +110,7 @@ def test_get_section_video_info_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/video_info.txt",
-                                   Log.get_section_video_info,
+                                   RawLog.get_section_video_info,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -123,7 +123,7 @@ def test_get_section_commands_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/comm.txt",
-                                   Log.get_section_commands,
+                                   RawLog.get_section_commands,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -136,7 +136,7 @@ def test_get_section_raw_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/raw.txt",
-                                   Log.get_section_raw,
+                                   RawLog.get_section_raw,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -149,7 +149,7 @@ def test_get_section_raw_no_behavior():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_raw,
+                                   RawLog.get_section_raw,
                                    TEST_RES + "/realisticLogs/noBehavior.txt")
     assert exp == act
 
@@ -161,7 +161,7 @@ def test_get_section_full_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/full.txt",
-                                   Log.get_section_full,
+                                   RawLog.get_section_full,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -174,7 +174,7 @@ def test_get_section_full_no_behavior():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_full,
+                                   RawLog.get_section_full,
                                    TEST_RES + "/realisticLogs/noBehavior.txt")
     assert exp == act
 
@@ -186,7 +186,7 @@ def test_get_section_notes_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/notes.txt",
-                                   Log.get_section_notes,
+                                   RawLog.get_section_notes,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -199,7 +199,7 @@ def test_get_section_notes_no_notes():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/blank.txt",
-                                   Log.get_section_notes,
+                                   RawLog.get_section_notes,
                                    TEST_RES + "/realisticLogs/noNotes.txt")
     assert exp == act
 
@@ -211,7 +211,7 @@ def test_get_section_marks_all():
 
     """
     exp, act = get_actual_expected(TEST_RES + "/expectedLogParts/marks.txt",
-                                   Log.get_section_marks,
+                                   RawLog.get_section_marks,
                                    TEST_RES + "/realisticLogs/all.txt")
 
     assert exp == act
@@ -229,7 +229,7 @@ def test_get_section_missing_end():
     failed = False
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
         try:
-            Log.get_section(file, "RAW LOG", [], "-----")
+            RawLog.get_section(file, "RAW LOG", [], "-----")
         except FileFormatError as error:
             assert str(error) == "The end line '-----' was not found in " \
                                  "tests/res/realisticLogs/all.txt"
@@ -249,7 +249,7 @@ def test_get_section_missing_start():
     failed = False
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
         try:
-            Log.get_section(file, "-----", [], "RAW LOG")
+            RawLog.get_section(file, "-----", [], "RAW LOG")
         except FileFormatError as error:
             assert str(error) == "The start line '-----' was not found in " \
                                  "tests/res/realisticLogs/all.txt"
@@ -276,7 +276,7 @@ def test_get_section_missing_header():
                                      "---")
     with open(TEST_RES + "/realisticLogs/all.txt", 'r') as file:
         try:
-            Log.get_section(file, "RAW LOG", headers, end)
+            RawLog.get_section(file, "RAW LOG", headers, end)
         except FileFormatError as error:
             assert str(error) == str(exp)
             failed = True
