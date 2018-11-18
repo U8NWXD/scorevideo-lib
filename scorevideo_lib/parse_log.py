@@ -62,6 +62,10 @@ class Log:
         raw = RawLog.from_file(log_file)
         return cls.from_raw_log(raw)
 
+    def sort_lists(self) -> None:
+        self.marks.sort()
+        self.full.sort()
+
 
 class RawLog:
     """Store an interpreted form of a log file and perform operations on it
