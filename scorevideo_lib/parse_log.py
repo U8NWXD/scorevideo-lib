@@ -589,11 +589,13 @@ class Mark(SectionItem):
     """Store a ``mark`` from the ``MARKS`` section
 
     Attributes:
-        frame: A positive integer representing the frame number at which the
+        frame: An integer representing the frame number at which the
             mark is placed
         time: A :py:class:timedelta object that represents the time elapsed
             from the start of the clip to the mark. This is a
-            representation of the time listed in the log line.
+            representation of the time listed in the log line. Negative times
+            are supported and are represented as their absolute times prefixed
+            with a ``-``.
         name: Name of the mark that describes its meaning
     """
 
@@ -688,7 +690,7 @@ class Mark(SectionItem):
         time_col_width = len(match[2])
         time_name_sep_width = len(match[3])
 
-        time = datetime.utcfromtimestamp(self.time.total_seconds())
+        time = datetime.utcfromtimestamp(abs(self.time.total_seconds()))
         if abs(self.time) < timedelta(seconds=60):
             # Under 1 minute (all can be expressed in secs microsecs)
             time_str = "0:" + time.strftime("%S.%f")
@@ -708,6 +710,10 @@ class Mark(SectionItem):
 
         # Truncate time_str to cut off all but 2 most significant decimal places
         time_str = time_str[:time_str.index(".") + 3]
+
+        # Add negative sign for negative times
+        if self.time.total_seconds() < 0:
+            time_str = "-" + time_str
 
         # Creates a template like "{0:>frame_col_width}{1:>time_col_width}  {2}"
         # Both the frame and time columns are right-justified and of lengths
