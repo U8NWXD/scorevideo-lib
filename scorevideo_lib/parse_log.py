@@ -22,6 +22,7 @@ from typing import List
 import re
 from datetime import timedelta
 from datetime import datetime
+from functools import total_ordering
 from scorevideo_lib.exceptions import FileFormatError
 
 
@@ -473,6 +474,7 @@ class SectionItem:
         return timedelta(seconds=secs)
 
 
+@total_ordering
 class BehaviorFull(SectionItem):
     """Store an interpreted representation of a behavior from the full section
 
@@ -557,7 +559,28 @@ class BehaviorFull(SectionItem):
         """
         return subject == "either"
 
+    def __lt__(self, other: "BehaviorFull"):
+        if self.frame != other.frame:
+            return self.frame < other.frame
+        if self.time != other.time:
+            return self.time < other.time
+        if self.description != other.description:
+            return self.description < other.description
+        if self.subject != other.subject:
+            return self.subject < other.subject
+        return False
 
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __eq__(self, other):
+        return self.__repr__() == other.__repr__()
+
+
+@total_ordering
 class Mark(SectionItem):
     """Store a ``mark`` from the ``MARKS`` section
 
@@ -690,3 +713,21 @@ class Mark(SectionItem):
                    str(time_col_width) + "}" + (" " * time_name_sep_width) + \
                    "{2}"
         return template.format(self.frame, time_str, self.name)
+
+    def __lt__(self, other: "Mark"):
+        if self.frame != other.frame:
+            return self.frame < other.frame
+        if self.time != other.time:
+            return self.time < other.time
+        if self.name != other.time:
+            return self.name < other.name
+        return False
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __eq__(self, other):
+        return self.__repr__() == other.__repr__()
