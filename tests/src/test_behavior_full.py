@@ -99,3 +99,59 @@ def test_init_valid_short_time():
 
 def test_init_valid_long_time():
     BehaviorFull("  171     0:01:05.70    Pot entry exit          either")
+
+
+def test_lt_frame_positive():
+    one = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  173     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_frame_negative():
+    one = BehaviorFull("  -173     0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  -171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_frame_both_signs():
+    one = BehaviorFull("  -171     0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_time_positive():
+    one = BehaviorFull("  171     0:00:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_time_negative():
+    one = BehaviorFull("  171     -0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     -0:00:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_time_both_signs():
+    one = BehaviorFull("  171     -0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_description():
+    one = BehaviorFull("  171     0:01:05.70    Aot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_description_lexicographic():
+    one = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    pot entry exit      either")
+
+    assert one < two
