@@ -261,3 +261,10 @@ def test_lt_name_lexicographic():
     second = Mark.from_line("    1     0:00.03    video starts")
 
     assert first < second
+
+
+def test_lt_equal():
+    first = Mark.from_line("    1     0:00.03    A video starts")
+    second = Mark.from_line("    1     0:00.03    A video starts")
+
+    assert first >= second
