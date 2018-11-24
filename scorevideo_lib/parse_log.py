@@ -813,6 +813,6 @@ class Mark(SectionItem):
             return self.frame < other.frame
         if self.time != other.time:
             return self.time < other.time
-        if self.name != other.time:
+        if self.name != other.name:
             return self.name < other.name
         return False
