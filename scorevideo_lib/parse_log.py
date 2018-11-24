@@ -138,13 +138,13 @@ class RawLog:
     # In this case, it is reasonable to have an instance attribute per section
 
     def __init__(self) -> None:
-        self.header = [""]  # type: List[str]
-        self.video_info = [""]  # type: List[str]
-        self.commands = [""]  # type: List[str]
-        self.raw = [""]  # type: List[str]
-        self.full = [""]  # type: List[str]
-        self.notes = [""]  # type: List[str]
-        self.marks = [""]  # type: List[str]
+        self.header = []  # type: List[str]
+        self.video_info = []  # type: List[str]
+        self.commands = []  # type: List[str]
+        self.raw = []  # type: List[str]
+        self.full = []  # type: List[str]
+        self.notes = []  # type: List[str]
+        self.marks = []  # type: List[str]
 
     @classmethod
     def from_file(cls, log_file) -> "RawLog":
