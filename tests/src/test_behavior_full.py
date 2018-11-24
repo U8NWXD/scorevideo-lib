@@ -165,3 +165,26 @@ def test_lt_description_lexicographic():
     two = BehaviorFull("  171     0:01:05.70    pot entry exit      either")
 
     assert one < two
+
+
+def test_lt_subject():
+    one = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+    one.subject = "aeither"  # Needed to avoid validator rejecting subject
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_subject_lexicographic():
+    one = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+    one.subject = "Either"  # Needed to avoid validator rejecting subject
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one < two
+
+
+def test_lt_equal():
+    one = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+    two = BehaviorFull("  171     0:01:05.70    Pot entry exit      either")
+
+    assert one >= two
