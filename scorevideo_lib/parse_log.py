@@ -69,9 +69,9 @@ class Log:
         # new_log.video_info = log.video_info
         # new_log.commands = log.commands
         # new_log.raw = log.raw
-        new_log.full = log.full
+        new_log.full = log.full.copy()
         # new_log.notes = log.notes
-        new_log.marks = log.marks
+        new_log.marks = log.marks.copy()
         return new_log
 
     @classmethod
