@@ -417,11 +417,12 @@ class SectionItem(BaseOps):
     def validate_frame(frame: str) -> bool:
         """Check whether ``frame`` represents a valid frame number
 
-        A valid frame number is any non-negative integer. Specifically, any
-        ``frame`` that is composed solely of one or more digits 0-9 is accepted.
+        A valid frame number is any integer. Specifically, any ``frame`` that is
+        composed solely of one or more digits 0-9 is accepted. Negative frames
+        are allowed and denoted by a prefix of ``-``.
 
         >>> SectionItem.validate_frame("-5")
-        False
+        True
         >>> SectionItem.validate_frame("05")
         True
         >>> SectionItem.validate_frame("hi5")
@@ -438,6 +439,9 @@ class SectionItem(BaseOps):
             otherwise
 
         """
+        if frame[0] == "-":
+            frame = frame[1:]
+
         return re.fullmatch(r"\A[0-9]+\Z", frame) is not None
 
     @staticmethod
@@ -450,6 +454,8 @@ class SectionItem(BaseOps):
         * ``#:##:##.##``
         * ``##:##:##.##``
 
+        A prefix of ``-`` is also allowed.
+
         TODO: Check whether the minute and hour values are valid (i.e. <60)
 
         Args:
@@ -459,6 +465,9 @@ class SectionItem(BaseOps):
 
         """
         num_colons = time_str.count(":")
+
+        if time_str[0] == "-":
+            time_str = time_str[1:]
 
         if num_colons == 1:
             return re.fullmatch(r"\A[0-9]{1,2}:[0-9]{2}\.[0-9]{2}\Z",
@@ -527,6 +536,12 @@ class SectionItem(BaseOps):
             or time as ``time_str`` does.
 
         """
+        neg = False
+
+        if time_str[0] == "-":
+            neg = True
+            time_str = time_str[1:]
+
         split_time = time_str.split(":")
         secs = float(split_time[-1])
         # MM:SS.SS -> [MM, SS.SS]
@@ -536,6 +551,8 @@ class SectionItem(BaseOps):
         elif len(split_time) == 3:
             secs += int(split_time[0]) * 60 * 60
             secs += int(split_time[1]) * 60
+        if neg:
+            secs = -secs
         return timedelta(seconds=secs)
 
 
@@ -732,7 +749,7 @@ class Mark(SectionItem):
         match = re.search(r"\A(\s*\S+)(\s{2,}\S+)(\s{2,})(?:\S+\s*)+",
                           other_line)
         if match is None:
-            err = "other_line '{}' is not a valid line from the LOG section".\
+            err = "other_line '{}' is not a valid line from the MARKS section".\
                 format(other_line)
             raise ValueError(err)
         # match.group(n) returns the string in other_line that was matched by
