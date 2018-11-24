@@ -124,7 +124,6 @@ class RawLog:
     """Store an interpreted form of a log file and perform operations on it
 
     Attributes:
-        log_file: Reference to the open log file. May need to be re-wound
         header: List of the lines in the header section
         video_info: List of the lines in the video info section
         commands: List of the lines in the commands section
