@@ -24,9 +24,10 @@ from datetime import timedelta
 from datetime import datetime
 from functools import total_ordering
 from scorevideo_lib.exceptions import FileFormatError
+from scorevideo_lib.base_utils import BaseOps
 
 
-class Log:
+class Log(BaseOps):
     """Store a parsed version of a log file
 
     This version stores only the information contained in the log, not any
@@ -120,7 +121,7 @@ class Log:
         self.full.sort()
 
 
-class RawLog:
+class RawLog(BaseOps):
     """Store an interpreted form of a log file and perform operations on it
 
     Attributes:
@@ -407,7 +408,7 @@ class RawLog:
         return section
 
 
-class SectionItem:
+class SectionItem(BaseOps):
     """Superclass for entries in a section of a log
 
     """
@@ -536,18 +537,6 @@ class SectionItem:
             secs += int(split_time[0]) * 60 * 60
             secs += int(split_time[1]) * 60
         return timedelta(seconds=secs)
-
-    def __repr__(self):
-        # pylint: disable=missing-docstring
-        return str(self.__dict__)
-
-    def __str__(self):
-        # pylint: disable=missing-docstring
-        return self.__repr__()
-
-    def __eq__(self, other):
-        # pylint: disable=missing-docstring
-        return self.__repr__() == other.__repr__()
 
 
 @total_ordering
