@@ -537,6 +537,18 @@ class SectionItem:
             secs += int(split_time[1]) * 60
         return timedelta(seconds=secs)
 
+    def __repr__(self):
+        # pylint: disable=missing-docstring
+        return str(self.__dict__)
+
+    def __str__(self):
+        # pylint: disable=missing-docstring
+        return self.__repr__()
+
+    def __eq__(self, other):
+        # pylint: disable=missing-docstring
+        return self.__repr__() == other.__repr__()
+
 
 @total_ordering
 class BehaviorFull(SectionItem):
@@ -633,15 +645,6 @@ class BehaviorFull(SectionItem):
         if self.subject != other.subject:
             return self.subject < other.subject
         return False
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return self.__repr__()
-
-    def __eq__(self, other):
-        return self.__repr__() == other.__repr__()
 
 
 @total_ordering
@@ -807,15 +810,3 @@ class Mark(SectionItem):
         if self.name != other.time:
             return self.name < other.name
         return False
-
-    def __repr__(self):
-        # pylint: disable=missing-docstring
-        return str(self.__dict__)
-
-    def __str__(self):
-        # pylint: disable=missing-docstring
-        return self.__repr__()
-
-    def __eq__(self, other):
-        # pylint: disable=missing-docstring
-        return self.__repr__() == other.__repr__()
