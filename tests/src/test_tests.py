@@ -18,7 +18,7 @@
 
 """
 
-from tests.src.test_log import get_actual_expected
+from tests.src.test_rawlog import get_actual_expected
 
 TEST_RES = "tests/res"
 
