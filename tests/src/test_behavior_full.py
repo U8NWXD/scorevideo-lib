@@ -54,6 +54,16 @@ def test_init_valid_negative_time():
     BehaviorFull("  171     -0:05.70    Pot entry exit          either")
 
 
+def test_init_invalid_nonnumeric_frame():
+    with pytest.raises(TypeError):
+        BehaviorFull("  17a1     0:05.70    Pot entry exit          either")
+
+
+def test_init_invalid_nonnumeric_time():
+    with pytest.raises(TypeError):
+        BehaviorFull("  171     a0:05.70    Pot entry exit          either")
+
+
 def test_init_invalid_no_frame():
     with pytest.raises(TypeError):
         BehaviorFull("       0:05.70    Pot entry exit          either")

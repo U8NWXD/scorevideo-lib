@@ -69,12 +69,22 @@ def test_from_line_invalid_time_one_middle_digit():
         Mark.from_line("    1     0:0.03    video start")
 
 
+def test_from_line_valid_negative_frame():
+    Mark.from_line("    -1     0:00.03    video start")
+
+
 def test_from_line_valid_time_negative():
     Mark.from_line("    1     -0:00.03    video start")
 
 
-def test_from_line_valid_negative_frame():
-    Mark.from_line("    -1     0:00.03    video start")
+def test_from_line_invalid_frame_nonnumeric():
+    with pytest.raises(TypeError):
+        Mark.from_line("    a1     0:00.03    video start")
+
+
+def test_from_line_invalid_time_nonnumeric():
+    with pytest.raises(TypeError):
+        Mark.from_line("    1     0:a00.03    video start")
 
 
 def test_from_line_invalid_name():
