@@ -195,3 +195,59 @@ def test_to_line_valid_remove_leading_zero_hours():
     temp = " 54001    30:00.03    video end"
     mark = Mark(17, timedelta(seconds=3601.05), "weird mark")
     assert mark.to_line(temp) == "    17  1:00:01.05    weird mark"
+
+
+def test_lt_frame_positive():
+    first = Mark.from_line("    1     0:00.03    video start")
+    second = Mark.from_line("    2     0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_frame_negative():
+    first = Mark.from_line("    -2     0:00.03    video start")
+    second = Mark.from_line("    -1     0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_frame_both_signs():
+    first = Mark.from_line("    -1     0:00.03    video start")
+    second = Mark.from_line("    1     0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_time_positive():
+    first = Mark.from_line("    1     0:00.03    video start")
+    second = Mark.from_line("    1     0:05.00    video start")
+
+    assert first < second
+
+
+def test_lt_time_negative():
+    first = Mark.from_line("    1     -0:05.00    video start")
+    second = Mark.from_line("    1     -0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_time_both_signs():
+    first = Mark.from_line("    1     -0:00.03    video start")
+    second = Mark.from_line("    1     0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_name():
+    first = Mark.from_line("    1     0:00.03    a video starts")
+    second = Mark.from_line("    1     0:00.03    video start")
+
+    assert first < second
+
+
+def test_lt_name_lexicographic():
+    first = Mark.from_line("    1     0:00.03    A video starts")
+    second = Mark.from_line("    1     0:00.03    video starts")
+
+    assert first < second
