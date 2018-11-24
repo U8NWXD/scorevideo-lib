@@ -19,7 +19,8 @@
 """
 
 from datetime import timedelta
-from scorevideo_lib.add_marks import copy_mark
+import pytest
+from scorevideo_lib.add_marks import copy_mark, get_ending_mark
 from scorevideo_lib.parse_log import Log, RawLog, Mark
 
 TEST_RES = "tests/res"
@@ -36,9 +37,10 @@ def test_add_lights_on_mark_correct():
     with open(TEST_RES + "/realisticLogs/all.txt", "r") as file:
         destination = RawLog.from_file(file)
 
-    frame_diff = 54001 - 12331 + 52475
+    frame_diff = 54001 + 54001 - 12331 + 52475
     # pylint: disable=bad-continuation
-    time_diff = timedelta(minutes=30, seconds=0.03) - \
+    time_diff = timedelta(minutes=30, seconds=0.03) + \
+                timedelta(minutes=30, seconds=0.03) - \
                 timedelta(minutes=6, seconds=51.03) + \
                 timedelta(minutes=29, seconds=9.17)
     with open(TEST_RES + "/realisticLogs/all.txt", "r") as file:
@@ -46,8 +48,13 @@ def test_add_lights_on_mark_correct():
     new_mark = Mark(-frame_diff, -time_diff, dest_label)
     expected.marks.append(new_mark.to_line(expected.marks[0]))
 
-    actual = copy_mark([source, middle], "Lights On", destination,
+    actual = copy_mark([source, middle, middle], "Lights On", destination,
                        dest_label)
 
     assert expected.marks == actual.marks
     assert "-" in expected.marks[-1]
+
+
+def test_missing_start_mark():
+    with pytest.raises(ValueError):
+        get_ending_mark([Mark(0, timedelta(seconds=0), "foo")])
