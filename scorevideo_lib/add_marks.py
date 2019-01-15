@@ -124,3 +124,21 @@ def get_ending_mark(marks: List[Mark]) -> Mark:
             return mark
     raise ValueError("No mark with name '{}' found in list '{}'".format(
         END_MARK, marks))
+
+
+def get_ending_behav(behavs: List[BehaviorFull],
+                     end_descriptions: List[str]) -> BehaviorFull:
+    """Get the behavior whose description is found in a list
+
+    Args:
+        behavs: List of behaviors whose descriptions to search through
+        end_descriptions: List of descriptions to search for
+
+    Returns: The first behavior whose description is found in the list
+
+    """
+    for behav in behavs:
+        if behav.description in end_descriptions:
+            return behav
+    raise ValueError("No ending behavior description found in '{}'".format(
+        behavs))
