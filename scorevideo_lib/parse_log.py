@@ -527,7 +527,7 @@ class SectionItem(BaseOps):
         """Convert a string representation of a time into a :py:class:timedelta
 
         >>> SectionItem.str_to_timedelta("30:00.03")
-        datetime.timedelta(0, 1800, 30000)
+        datetime.timedelta(seconds=1800, microseconds=30000)
 
         Args:
             time_str: String representation of the time or duration
@@ -578,7 +578,7 @@ class BehaviorFull(SectionItem):
         >>> behav.frame
         1769
         >>> behav.time
-        datetime.timedelta(0, 58, 970000)
+        datetime.timedelta(seconds=58, microseconds=970000)
         >>> behav.description
         'Flee from male'
         >>> behav.subject
@@ -681,7 +681,7 @@ class Mark(SectionItem):
         >>> mark.frame
         54001
         >>> mark.time
-        datetime.timedelta(0, 1800, 30000)
+        datetime.timedelta(seconds=1800, microseconds=30000)
         >>> mark.name
         'video end'
 
