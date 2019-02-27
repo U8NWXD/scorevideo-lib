@@ -55,6 +55,10 @@ def test_add_lights_on_mark_correct():
     assert "-" in expected.marks[-1]
 
 
+def test_add_lights_on_nondisjoint_correct():
+    pass # TODO: Write this test for add_lights non-disjoint
+
+
 def test_missing_start_mark():
     with pytest.raises(ValueError):
         get_ending_mark([Mark(0, timedelta(seconds=0), "foo")])
