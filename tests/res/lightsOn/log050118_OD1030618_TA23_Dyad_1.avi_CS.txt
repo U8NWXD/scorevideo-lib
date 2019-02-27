@@ -1,0 +1,78 @@
+scorevideo LOG
+File:  log050118_OD1030618_TA23_Dyad_1.avi_CS.mat
+
+VIDEO FILE SET
+Videotype:  VIDEO
+Directory:  L:\TEMPORARY_Beau_DyadAssaysDamselfish
+Video file set:
+   050118_OD1030618_TA23_Dyad_1.avi 1-48672
+Play duration (min):  27.040
+Frames/sec of files:  30
+No. of subjects:  2
+
+COMMAND SET AND SETTINGS
+-------------------------------
+start|stop|subject|description
+-------------------------------
+A             0      Lead Swim at female
+C             0      Chase female
+D             0      Lateral display at female
+F             0      Flee from female
+N      G      0      Spawning
+Q             0      Quiver at female 
+R             0      Rostral display at female
+S             0      Bite female
+a             0      Lead swim at male
+b             0      Lead swim at ambigous
+c             0      chase male
+d             0      Lateral display at male
+e             0      Pot entry
+f             0      Flee from male
+l             0      Male follows male into pot
+m             0      Lateral display at ambiguous
+p             0      Dig
+q             0      Quiver at male
+r             0      Rostral display at male
+s             0      Bite male
+t             0      Victim of male biting
+x             0      Pot entry exit
+z             0      Quiver at ambigous
+-------------------------------
+subject 1:  subject1
+subject 2:  subject2
+subj#:  0=either  1=subject1  2=subject2  3=both
+No. of simultaneous behaviors:  one
+
+RAW LOG
+------------------------------------------
+frame|time(min:sec)|command
+------------------------------------------
+11451      6:21.70     e
+11451      6:21.70     e
+11598      6:26.60     x
+19939     11:04.63     e
+19995     11:06.50     x
+------------------------------------------
+
+FULL LOG
+------------------------------------------
+frame|time(min:sec)|description|action|subject
+------------------------------------------
+11451     6:21.70    LIGHTS ON         either
+11451     6:21.70    Pot entry         either
+11598     6:26.60    Pot entry exit    either
+19939    11:04.63    Pot entry         either
+19995    11:06.50    Pot entry exit    either
+------------------------------------------
+
+NOTES
+------------------------------------------
+------------------------------------------
+
+MARKS
+------------------------------------------
+frame|time(min:sec)|mark name
+------------------------------------------
+    1     0:00.03    video start
+48672    27:02.40    video end
+------------------------------------------
