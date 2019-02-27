@@ -34,6 +34,11 @@ COMMANDS_START = "COMMAND SET AND SETTINGS"
 COMMANDS_HEADER = ["-------------------------------",
                    "start|stop|subject|description",
                    "-------------------------------"]
+# TODO: This is hacky and not generic
+POST_COMMANDS_TEXT = ["subject 1:  subject1",
+                      "subject 2:  subject2",
+                      "subj#:  0=either  1=subject1  2=subject2  3=both",
+                      "No. of simultaneous behaviors:  one"]
 RAW_START = "RAW LOG"
 RAW_HEADER = [LONG_LINE,
               "frame|time(min:sec)|command",
@@ -424,7 +429,7 @@ class RawLog(BaseOps):
 
     @staticmethod
     def section_to_strings(start: str, header: List[str], body: List[str],
-                           end: str) -> List[str]:
+                           end: str, trailing: List[str] = None) -> List[str]:
         full = []
         if start is not None:
             full.append(start)
@@ -434,6 +439,8 @@ class RawLog(BaseOps):
             full.extend(body)
         if end is not None:
             full.append(end)
+        if trailing is not None:
+            full.extend(trailing)
         full.append("")
         return full
 
@@ -443,17 +450,19 @@ class RawLog(BaseOps):
         lines.append("")
 
         sections = [
-            (VIDEO_INFO_START, [], self.video_info, None),
-            (COMMANDS_START, COMMANDS_HEADER, self.commands, SHORT_LINE),
-            (RAW_START, RAW_HEADER, self.raw, LONG_LINE),
-            (FULL_START, FULL_HEADER, self.full, LONG_LINE),
-            (NOTES_START, NOTES_HEADER, self.notes, LONG_LINE),
-            (MARKS_START, MARKS_HEADER, self.marks, LONG_LINE)
+            (VIDEO_INFO_START, [], self.video_info, None, None),
+            (COMMANDS_START, COMMANDS_HEADER, self.commands, SHORT_LINE,
+             POST_COMMANDS_TEXT),
+            (RAW_START, RAW_HEADER, self.raw, LONG_LINE, None),
+            (FULL_START, FULL_HEADER, self.full, LONG_LINE, None),
+            (NOTES_START, NOTES_HEADER, self.notes, LONG_LINE, None),
+            (MARKS_START, MARKS_HEADER, self.marks, LONG_LINE, None)
         ]
 
-        for start, header, body, end in sections:
-            lines.extend(RawLog.section_to_strings(start, header, body, end))
-        return lines
+        for start, header, body, end, trailing in sections:
+            lines.extend(RawLog.section_to_strings(start, header, body, end,
+                                                   trailing))
+        return lines[:-1]
 
     def __str__(self):
         return str(self.to_lines())
