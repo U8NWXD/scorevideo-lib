@@ -24,7 +24,7 @@ from datetime import timedelta
 from datetime import datetime
 from functools import total_ordering
 from scorevideo_lib.exceptions import FileFormatError
-from scorevideo_lib.base_utils import BaseOps
+from scorevideo_lib.base_utils import BaseOps, remove_trailing_newline
 
 
 LONG_LINE = "------------------------------------------"
@@ -399,26 +399,26 @@ class RawLog(BaseOps):
             Newlines or return carriages are stripped from the ends of lines.
         """
         line = log_file.readline()
-        while line.rstrip() != start:
+        while remove_trailing_newline(line) != start:
+            # readline returns '' at the end of a file and '\n' for blank lines
             if line == "":
                 raise FileFormatError("The start line '" + start +
                                       "' was not found in " + log_file.name)
             else:
                 line = log_file.readline()
         for header_line in header:
-            found_line = log_file.readline().rstrip()
+            found_line = remove_trailing_newline(log_file.readline())
             if header_line != found_line:
                 raise FileFormatError.from_lines(log_file.name, found_line,
                                                  header_line)
         section = []
         line = log_file.readline()
-        while not line.rstrip() == end:
+        while not remove_trailing_newline(line) == end:
             if line == "":
                 raise FileFormatError("The end line '" + end +
                                       "' was not found in " + log_file.name)
-            line = line.rstrip()
-            section.append(line)
-            line = log_file.readline().rstrip()
+            section.append(remove_trailing_newline(line))
+            line = log_file.readline()
 
         return section
 

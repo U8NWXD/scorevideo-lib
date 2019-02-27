@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Callable, Iterable, List, Any
+
 """Basic utilities for generally applicable functions
 
 """
@@ -35,3 +37,9 @@ class BaseOps:
     def __eq__(self, other):
         # pylint: disable=missing-docstring
         return self.__repr__() == other.__repr__()
+
+
+def remove_trailing_newline(s: str):
+    if len(s) > 0 and s[-1] == "\n":
+        s = s[:-1]
+    return s

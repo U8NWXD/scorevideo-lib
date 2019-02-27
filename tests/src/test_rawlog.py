@@ -20,6 +20,7 @@
 
 from scorevideo_lib.parse_log import RawLog
 from scorevideo_lib.exceptions import FileFormatError
+from scorevideo_lib.base_utils import remove_trailing_newline
 
 TEST_RES = "tests/res"
 
@@ -44,7 +45,7 @@ def test_constructor_all():
 
     for file, found in tests:
         with open(TEST_RES + "/expectedLogParts/" + file, 'r') as part_file:
-            expected = [line.rstrip() for line in part_file]
+            expected = [remove_trailing_newline(line) for line in part_file]
         assert found == expected
 
 
@@ -68,8 +69,9 @@ def test_constructor_no_notes():
 
     for file, found in tests:
         with open(TEST_RES + "/expectedLogParts/" + file, 'r') as part_file:
-            expected = [line.rstrip() for line in part_file]
+            expected = [remove_trailing_newline(line) for line in part_file]
         assert found == expected
+
 
 def get_actual_expected(expected_path, extractor, source_path):
     """Get the actual and expected outputs from section extraction methods
@@ -84,7 +86,7 @@ def get_actual_expected(expected_path, extractor, source_path):
 
     """
     with open(expected_path, 'r') as file:
-        expected = [line.rstrip() for line in file.readlines()]
+        expected = [remove_trailing_newline(line) for line in file.readlines()]
     with open(source_path, 'r') as source:
         actual = extractor(source)
     return expected, actual
