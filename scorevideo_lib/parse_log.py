@@ -27,6 +27,29 @@ from scorevideo_lib.exceptions import FileFormatError
 from scorevideo_lib.base_utils import BaseOps
 
 
+LONG_LINE = "------------------------------------------"
+SHORT_LINE = "-------------------------------"
+VIDEO_INFO_START = "VIDEO FILE SET"
+COMMANDS_START = "COMMAND SET AND SETTINGS"
+COMMANDS_HEADER = ["-------------------------------",
+                   "start|stop|subject|description",
+                   "-------------------------------"]
+RAW_START = "RAW LOG"
+RAW_HEADER = [LONG_LINE,
+              "frame|time(min:sec)|command",
+              LONG_LINE]
+FULL_START = "FULL LOG"
+FULL_HEADER = [LONG_LINE,
+               "frame|time(min:sec)|description|action|subject",
+               LONG_LINE]
+NOTES_START = "NOTES"
+NOTES_HEADER = [LONG_LINE]
+MARKS_HEADER = [LONG_LINE,
+                "frame|time(min:sec)|mark name",
+                LONG_LINE]
+MARKS_START = "MARKS"
+
+
 class Log(BaseOps):
     """Store a parsed version of a log file
 
@@ -235,7 +258,7 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        return RawLog.get_section(log_file, "VIDEO FILE SET", [], "")
+        return RawLog.get_section(log_file, VIDEO_INFO_START, [], "")
 
     @staticmethod
     def get_section_commands(log_file) -> List[str]:
@@ -255,11 +278,9 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        header = ["-------------------------------",
-                  "start|stop|subject|description",
-                  "-------------------------------"]
-        end = "-------------------------------"
-        return RawLog.get_section(log_file, "COMMAND SET AND SETTINGS", header,
+        header = COMMANDS_HEADER
+        end = SHORT_LINE
+        return RawLog.get_section(log_file, COMMANDS_START, header,
                                   end)
 
     @staticmethod
@@ -280,11 +301,9 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        header = ["------------------------------------------",
-                  "frame|time(min:sec)|command",
-                  "------------------------------------------"]
-        end = "------------------------------------------"
-        return RawLog.get_section(log_file, "RAW LOG", header, end)
+        header = RAW_HEADER
+        end = LONG_LINE
+        return RawLog.get_section(log_file, RAW_START, header, end)
 
     @staticmethod
     def get_section_full(log_file) -> List[str]:
@@ -304,11 +323,9 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        header = ["------------------------------------------",
-                  "frame|time(min:sec)|description|action|subject",
-                  "------------------------------------------"]
-        end = "------------------------------------------"
-        return RawLog.get_section(log_file, "FULL LOG", header, end)
+        header = FULL_HEADER
+        end = LONG_LINE
+        return RawLog.get_section(log_file, FULL_START, header, end)
 
     @staticmethod
     def get_section_notes(log_file) -> List[str]:
@@ -327,9 +344,9 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        end = "------------------------------------------"
-        header = ["------------------------------------------"]
-        return RawLog.get_section(log_file, "NOTES", header, end)
+        header = NOTES_HEADER
+        end = LONG_LINE
+        return RawLog.get_section(log_file, NOTES_START, header, end)
 
     @staticmethod
     def get_section_marks(log_file) -> List[str]:
@@ -349,11 +366,9 @@ class RawLog(BaseOps):
             each line a separate element in the list.
             Newlines or return carriages are stripped from the ends of lines.
         """
-        header = ["------------------------------------------",
-                  "frame|time(min:sec)|mark name",
-                  "------------------------------------------"]
-        end = "------------------------------------------"
-        return RawLog.get_section(log_file, "MARKS", header, end)
+        header = MARKS_HEADER
+        end = LONG_LINE
+        return RawLog.get_section(log_file, MARKS_START, header, end)
 
     @staticmethod
     def get_section(log_file, start: str, header: List[str], end: str) \
