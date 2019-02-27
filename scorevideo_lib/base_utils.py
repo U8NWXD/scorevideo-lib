@@ -39,6 +39,51 @@ class BaseOps:
         return self.__repr__() == other.__repr__()
 
 
+def add_to_partition(elem: object, partitions: List[List[object]],
+                     is_equiv: Callable[[object, object], bool]):
+    """Helper function to add an element to an appropriate equivalence class
+
+    Adds the element to an existing class if one is available or creates a
+    new class by adding a partition if necessary.
+
+    Args:
+        elem: The element to add
+        partitions: The list of equivalence classes to add ``elem`` to
+        is_equiv: A function that accepts two elements of lst and returns
+            whether those elements should be in the same equivalence class.
+            For proper functioning, should implement an equivalence relation.
+
+    Returns: The equivalence classes provided but with ``elem`` added.
+
+    """
+    for partition in partitions:
+        if is_equiv(elem, partition[0]):
+            partition.append(elem)
+            return
+    partitions.append([elem])
+    return partitions
+
+
+def equiv_partition(lst: Iterable[object],
+                    is_equiv: Callable[[object, object], bool]):
+    """Splits elements into equivalence classes using a provided callback
+
+    Args:
+        lst: The elements to divide in to equivalence classes. Is not modified.
+        is_equiv: A function that accepts two elements of lst and returns
+            whether those elements should be in the same equivalence class.
+            For proper functioning, should implement an equivalence relation.
+
+    Returns: A list of the partitions. Each element will be in exactly one
+        partition.
+
+    """
+    partitions = []
+    for elem in lst:
+        add_to_partition(elem, partitions, is_equiv)
+    return partitions
+
+
 def remove_trailing_newline(s: str):
     if len(s) > 0 and s[-1] == "\n":
         s = s[:-1]
