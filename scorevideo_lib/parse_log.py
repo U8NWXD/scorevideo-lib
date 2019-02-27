@@ -422,6 +422,42 @@ class RawLog(BaseOps):
 
         return section
 
+    @staticmethod
+    def section_to_strings(start: str, header: List[str], body: List[str],
+                           end: str) -> List[str]:
+        full = []
+        if start is not None:
+            full.append(start)
+        if header is not None:
+            full.extend(header)
+        if body is not None:
+            full.extend(body)
+        if end is not None:
+            full.append(end)
+        full.append("")
+        return full
+
+    def to_lines(self) -> List[str]:
+        lines = []
+        lines.extend(self.header)
+        lines.append("")
+
+        sections = [
+            (VIDEO_INFO_START, [], self.video_info, None),
+            (COMMANDS_START, COMMANDS_HEADER, self.commands, SHORT_LINE),
+            (RAW_START, RAW_HEADER, self.raw, LONG_LINE),
+            (FULL_START, FULL_HEADER, self.full, LONG_LINE),
+            (NOTES_START, NOTES_HEADER, self.notes, LONG_LINE),
+            (MARKS_START, MARKS_HEADER, self.marks, LONG_LINE)
+        ]
+
+        for start, header, body, end in sections:
+            lines.extend(RawLog.section_to_strings(start, header, body, end))
+        return lines
+
+    def __str__(self):
+        return str(self.to_lines())
+
 
 class SectionItem(BaseOps):
     """Superclass for entries in a section of a log
