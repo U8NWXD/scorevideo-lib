@@ -1,0 +1,14 @@
+Chase female
+Flee from female
+Bad lateral display at female
+Rostral display at female
+Bite female
+chase male
+Lateral display at male
+Flee from male
+Bad lateral display at male
+Lateral display at ambiguous
+Chase ambiguous
+Bite ambiguous
+Rostral display at male
+Bite male
