@@ -18,7 +18,7 @@
 
 """
 
-from typing import List
+from typing import List, Optional
 import re
 from datetime import timedelta
 from datetime import datetime
@@ -430,6 +430,19 @@ class RawLog(BaseOps):
     @staticmethod
     def section_to_strings(start: str, header: List[str], body: List[str],
                            end: str, trailing: List[str] = None) -> List[str]:
+        """Combine a section's components into a list of strings for writing
+
+        Args:
+            start: The invariant line that signals the start of the section
+            header: Any invariant header lines that follow ``start``
+            body: The variably body of the section
+            end: The invariant line that signals the end of the section
+            trailing: Any lines that follow the ``end`` line
+
+        Returns: A list of strings suitable for writing to a file. Note that the
+            strings do not end in a newline.
+
+        """
         full = []
         if start is not None:
             full.append(start)
@@ -445,6 +458,12 @@ class RawLog(BaseOps):
         return full
 
     def to_lines(self) -> List[str]:
+        """Convert the current RawLog into the strings for writing to a file
+
+        Returns: A list of strings (that do not end in newlines) that can be
+            written to a file to create a properly-formatted log file.
+
+        """
         lines = []
         lines.extend(self.header)
         lines.append("")
@@ -465,6 +484,9 @@ class RawLog(BaseOps):
         return lines[:-1]
 
     def __str__(self):
+        """Wrapper that returns the result of calling :py:meth:`RawLog.to_lines`
+
+        """
         return str(self.to_lines())
 
 
