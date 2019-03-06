@@ -429,7 +429,8 @@ class RawLog(BaseOps):
 
     @staticmethod
     def section_to_strings(start: str, header: List[str], body: List[str],
-                           end: str, trailing: List[str] = None) -> List[str]:
+                           end: Optional[str],
+                           trailing: List[str] = None) -> List[str]:
         """Combine a section's components into a list of strings for writing
 
         Args:
