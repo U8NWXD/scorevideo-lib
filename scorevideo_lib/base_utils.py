@@ -85,6 +85,21 @@ def equiv_partition(lst: Iterable[object],
 
 
 def remove_trailing_newline(s: str):
-    if len(s) > 0 and s[-1] == "\n":
+    r"""Remove a single trailing newline if it exists in a string
+
+    >>> remove_trailing_newline('s\n')
+    's'
+    >>> remove_trailing_newline('s')
+    's'
+    >>> remove_trailing_newline('s\n\n')
+    's\n'
+
+    Args:
+        s: The string to remove a newline from
+
+    Returns: ``s``, but without a terminal trailing newline, if it was present
+
+    """
+    if s and s[-1] == "\n":
         s = s[:-1]
     return s
