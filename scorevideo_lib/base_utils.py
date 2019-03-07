@@ -59,7 +59,7 @@ def add_to_partition(elem: object, partitions: List[List[object]],
     for partition in partitions:
         if is_equiv(elem, partition[0]):
             partition.append(elem)
-            return
+            return partitions
     partitions.append([elem])
     return partitions
 
