@@ -7,3 +7,4 @@ venvScoreLib
 .pytest_cache
 .coverage
 .mypy_cache
+.hypothesis/
