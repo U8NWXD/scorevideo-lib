@@ -65,7 +65,8 @@ def add_to_partition(elem: object, partitions: List[List[object]],
 
 
 def equiv_partition(lst: Iterable[object],
-                    is_equiv: Callable[[object, object], bool]):
+                    is_equiv: Callable[[object, object], bool]) \
+        -> List[List[object]]:
     """Splits elements into equivalence classes using a provided callback
 
     Args:
@@ -78,7 +79,7 @@ def equiv_partition(lst: Iterable[object],
         partition.
 
     """
-    partitions = []
+    partitions = []  # type: List[List[object]]
     for elem in lst:
         add_to_partition(elem, partitions, is_equiv)
     return partitions
