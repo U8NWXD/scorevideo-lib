@@ -101,6 +101,7 @@ def remove_trailing_newline(s: str):
     Returns: ``s``, but without a terminal trailing newline, if it was present
 
     """
+    # For how to include `\n` in doctests: https://stackoverflow.com/a/8849771
     if s and s[-1] == "\n":
         s = s[:-1]
     return s
