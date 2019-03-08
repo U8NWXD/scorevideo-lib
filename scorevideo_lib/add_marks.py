@@ -85,8 +85,8 @@ def copy_mark(logs: List[Tuple[Log, timedelta, int]], src_pattern: str,
     found = False
     frames = 0
     time = timedelta(seconds=0)
-    for log in logs:
-        log[0].sort_lists()
+    for tup in logs:
+        tup[0].sort_lists()
 
     for log, s_time, s_frame in logs:
         if not found:
