@@ -16,32 +16,37 @@
 
 import os
 from shutil import copytree, rmtree
-from transfer_lights_on_marks import batch_mark_lights_on
+from pytest import fixture
+from scorevideo_lib.transfer_lights_on_marks import batch_mark_lights_on
 
 TEST_RES = "tests/res"
 
 # pragma pylint: disable=missing-docstring
 
 
-def test_batch_mark_lights_on():
+@fixture
+def temp_test_dir():
     src = os.path.join(TEST_RES, "lightsOn")
     dst = os.path.join(TEST_RES, "tmp")
     copytree(src, dst)
-    try:
-        batch_mark_lights_on(dst)
-        scored_name = "log050118_OD1030618_TA23_Dyad_Morning.avi_CS.txt"
-        expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
-        with open(os.path.join(dst, scored_name)) as actual_file:
-            with open(os.path.join(src, scored_name)) as expected_file:
-                actual = actual_file.readlines()
-                expected = expected_file.readlines()
-                expected.insert(len(expected) - 1, expected_mark)
-        rmtree(dst)
-    except Exception as e:
-        rmtree(dst)
-        raise e
-    for line in actual:
-        print(line, end="")
+    yield src, dst
+    rmtree(dst)
+
+
+def lights_on_test_helper(temp_test_dir, scored_name, expected_mark):
+    src, dst = temp_test_dir
+    batch_mark_lights_on(dst)
+    with open(os.path.join(dst, scored_name)) as actual_file:
+        with open(os.path.join(src, scored_name)) as expected_file:
+            actual = actual_file.readlines()
+            expected = expected_file.readlines()
+            expected.insert(len(expected) - 1, expected_mark)
     assert actual == expected
+
+
+def test_batch_mark_lights_on(temp_test_dir):
+    scored_name = "log050118_OD1030618_TA23_Dyad_Morning.avi_CS.txt"
+    expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
+    lights_on_test_helper(temp_test_dir, scored_name, expected_mark)
 
 # TODO: More thorough testing
