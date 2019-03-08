@@ -47,7 +47,7 @@ Getting the Code and Dependencies
       $ pip install -r requirements.txt
 
 Now you're ready to use the library! You can check out the API reference
-`here <modules>`_.
+`here <modules.html>`_.
 
 .. note:: If your data is from dyad assays and structured accordingly, you can
     transfer lights-on marks my running

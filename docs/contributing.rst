@@ -9,7 +9,7 @@ Your First Contribution
 #. Create a fork of this repository on `GitHub <https://www.github.com>`_ under
    your own account.
 
-#. Follow the `Getting Started <getting-started>`_ instructions, substituting
+#. Follow the `Getting Started <getting-started.html>`_ instructions, substituting
    references to the main repository for your fork.
 
 #. Create a new branch
