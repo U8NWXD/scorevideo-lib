@@ -1,6 +1,7 @@
 # `scorevideo_lib`: Scorevideo Library
 [![Build Status](https://travis-ci.com/U8NWXD/scorevideo_lib.svg?branch=master)](https://travis-ci.com/U8NWXD/scorevideo_lib)
 [![codecov](https://codecov.io/gh/U8NWXD/scorevideo_lib/branch/master/graph/badge.svg)](https://codecov.io/gh/U8NWXD/scorevideo_lib)
+[![Documentation Status](https://readthedocs.org/projects/scorevideo-lib/badge/?version=latest)](https://scorevideo-lib.readthedocs.io/en/latest/?badge=latest)
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](LICENSE.txt)
 
 Library of utilities for working with the MATLAB program
