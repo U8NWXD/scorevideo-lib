@@ -7,8 +7,8 @@ Library of utilities for working with the MATLAB program
 `scorevideo`.
 
 ## Development Status
-`scorevideo_lib` is still in early development and has not yet had an alpha 
-release.
+`scorevideo_lib` is in development and should not be relied upon for
+critical tasks. It is, however, useful for a limited set of tasks.
 
 ## Code Style
 Python code should conform to the 
@@ -66,6 +66,12 @@ PEP8 are checked by `pylint`.
 This analysis is intended to be a fall-back defense, as unit testing should be 
 thorough.
 
+### Type Checking
+All code should use type hints wherever type cannot be inferred. At a minimum,
+all function prototypes should have type hints for the return value and each
+parameter. Type hinting is performed in the code itself, not in docstrings.
+Static type analysis is performed by `mypy`
+
 ### Code Coverage
 When running the test suite using `test.sh`, code coverage is computed by 
 [`pytest-cov`](https://pytest-cov.readthedocs.io/en/latest/) when running 
@@ -79,17 +85,4 @@ Coverage is tracked by [Codecov](https://codecov.io), which serves the badge at
 the top of this README.
 
 ## License and Copyright
-Copyright (c) 2018  U8N WXD <cs.temporary@icloud.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Use of this repository is governed by the license in [LICENSE.txt](LICENSE.txt)

@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'scorevideo_lib'
-copyright = '2018, U8N WXD'
+copyright = '2018-2019, U8N WXD'
 author = 'U8N WXD'
 
 # The short X.Y version
