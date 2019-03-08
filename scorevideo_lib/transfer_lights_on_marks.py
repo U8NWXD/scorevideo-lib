@@ -197,7 +197,7 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
     partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
 
     for partition in partitions:
-        scored: str = None
+        scored = None
         for filename in partition:
             if is_scored(filename):
                 assert scored is None
