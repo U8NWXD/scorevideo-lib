@@ -25,10 +25,11 @@ from scorevideo_lib.base_utils import equiv_partition
 
 
 def test_equiv_partition_simple():
-    nums = [1, 1, 5, 6, 3, 8, 8, 5, 7, 3, 5, 4, 7, 8]
+    nums = [str(i) for i in [1, 1, 5, 6, 3, 8, 8, 5, 7, 3, 5, 4, 7, 8]]
     nums_orig = nums.copy()
     partitions = equiv_partition(nums, lambda x, y: x == y)
-    exp = [[1, 1], [5, 5, 5], [6], [3, 3], [8, 8, 8], [7, 7], [4]]
+    exp = [['1', '1'], ['5', '5', '5'], ['6'], ['3', '3'], ['8', '8', '8'],
+           ['7', '7'], ['4']]
     assert partitions == exp
     assert nums == nums_orig
 

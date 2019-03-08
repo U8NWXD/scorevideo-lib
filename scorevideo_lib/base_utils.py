@@ -39,8 +39,8 @@ class BaseOps:
         return self.__repr__() == other.__repr__()
 
 
-def add_to_partition(elem: object, partitions: List[List[object]],
-                     is_equiv: Callable[[object, object], bool]):
+def add_to_partition(elem: str, partitions: List[List[str]],
+                     is_equiv: Callable[[str, str], bool]):
     """Helper function to add an element to an appropriate equivalence class
 
     Adds the element to an existing class if one is available or creates a
@@ -64,9 +64,9 @@ def add_to_partition(elem: object, partitions: List[List[object]],
     return partitions
 
 
-def equiv_partition(lst: Iterable[object],
-                    is_equiv: Callable[[object, object], bool]) \
-        -> List[List[object]]:
+def equiv_partition(lst: Iterable[str],
+                    is_equiv: Callable[[str, str], bool]) \
+        -> List[List[str]]:
     """Splits elements into equivalence classes using a provided callback
 
     Args:
@@ -79,7 +79,7 @@ def equiv_partition(lst: Iterable[object],
         partition.
 
     """
-    partitions = []  # type: List[List[object]]
+    partitions = []  # type: List[List[str]]
     for elem in lst:
         add_to_partition(elem, partitions, is_equiv)
     return partitions
