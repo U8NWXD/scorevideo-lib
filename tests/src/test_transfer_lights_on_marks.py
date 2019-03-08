@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Tests for the :py:mod:`transfer_lights_on_marks` tool
+
+"""
+
 import os
 from shutil import copytree, rmtree
 from pytest import fixture
@@ -21,6 +25,9 @@ from scorevideo_lib.transfer_lights_on_marks import batch_mark_lights_on
 from tests.src import TEST_RES
 
 # pragma pylint: disable=missing-docstring
+# pragma pylint: disable=redefined-outer-name
+# Pytest requires that when fixtures are used as parameters, they have the same
+# name as the fixture
 
 
 @fixture
