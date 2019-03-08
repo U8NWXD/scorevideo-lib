@@ -18,8 +18,7 @@ import os
 from shutil import copytree, rmtree
 from pytest import fixture
 from scorevideo_lib.transfer_lights_on_marks import batch_mark_lights_on
-
-TEST_RES = "tests/res"
+from tests.src import TEST_RES
 
 # pragma pylint: disable=missing-docstring
 

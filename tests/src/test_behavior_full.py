@@ -21,8 +21,6 @@
 import pytest
 from scorevideo_lib.parse_log import BehaviorFull
 
-TEST_RES = "tests/res"
-
 # pragma pylint: disable=missing-docstring
 
 

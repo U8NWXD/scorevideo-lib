@@ -19,8 +19,7 @@
 """
 
 from tests.src.test_rawlog import get_actual_expected
-
-TEST_RES = "tests/res"
+from tests.src import TEST_RES
 
 
 def test_file_read():

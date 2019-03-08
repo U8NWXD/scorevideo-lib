@@ -22,8 +22,7 @@ from datetime import timedelta
 import pytest
 from scorevideo_lib.add_marks import copy_mark_disjoint, get_ending_mark
 from scorevideo_lib.parse_log import Log, RawLog, Mark
-
-TEST_RES = "tests/res"
+from tests.src import TEST_RES
 
 # pragma pylint: disable=missing-docstring
 

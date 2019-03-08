@@ -20,8 +20,7 @@
 
 from datetime import timedelta
 from scorevideo_lib.parse_log import Log, BehaviorFull, Mark, RawLog
-
-TEST_RES = "tests/res"
+from tests.src import TEST_RES
 
 # pragma pylint: disable=missing-docstring
 

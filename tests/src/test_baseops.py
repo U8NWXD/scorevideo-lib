@@ -20,8 +20,6 @@
 
 from scorevideo_lib.base_utils import BaseOps
 
-TEST_RES = "tests/res"
-
 # pragma pylint: disable=missing-docstring
 
 

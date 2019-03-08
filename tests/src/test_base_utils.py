@@ -21,8 +21,6 @@ from hypothesis import given, example
 from hypothesis.strategies import text, lists
 from scorevideo_lib.base_utils import equiv_partition
 
-TEST_RES = "tests/res"
-
 # pragma pylint: disable=missing-docstring
 
 

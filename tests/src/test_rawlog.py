@@ -21,8 +21,7 @@
 from scorevideo_lib.parse_log import RawLog
 from scorevideo_lib.exceptions import FileFormatError
 from scorevideo_lib.base_utils import remove_trailing_newline
-
-TEST_RES = "tests/res"
+from tests.src import TEST_RES
 
 
 def test_constructor_all():
