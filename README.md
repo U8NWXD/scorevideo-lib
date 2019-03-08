@@ -24,5 +24,9 @@ Our documentation is hosted here: https://scorevideo-lib.readthedocs.io
 `scorevideo_lib` is in development and should not be relied upon for
 critical tasks. It is, however, useful for a limited set of tasks.
 
+## Code of Conduct
+We have set forth our expectations for conduct on this project in
+[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
 ## Legal
 Use of this repository is governed by the license in [LICENSE.txt](LICENSE.txt)
