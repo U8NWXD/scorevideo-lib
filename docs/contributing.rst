@@ -6,10 +6,10 @@ Contributing
 Your First Contribution
 =======================
 
-#. Create a fork of this repository on `GitHub <https://www.github.com>_` under
+#. Create a fork of this repository on `GitHub <https://www.github.com>`_ under
    your own account.
 
-#. Follow the `Getting Started <getting-started>_` instructions, substituting
+#. Follow the `Getting Started <getting-started>`_ instructions, substituting
    references to the main repository for your fork.
 
 #. Create a new branch
@@ -48,7 +48,7 @@ Your First Contribution
 
       $ git push -u origin my-new-branch
 
-#. Submit a pull request on `GitHub <https://www.github.com>_`
+#. Submit a pull request on `GitHub <https://www.github.com>`_
 
 #. Thanks for your contribution! One of the maintainers will get back to you
    soon with any suggested changes or feedback.
@@ -64,12 +64,12 @@ Code Style
 ----------
 
 Python code should conform to the
-`PEP8 <https://www.python.org/dev/peps/pep-0008/>_` style guidelines.
+`PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ style guidelines.
 
 Docstrings should conform to the
-`Google Style <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings>_`.
+`Google Style <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings>`_.
 For example (copied from
-`Google's Style Guide <https://github.com/google/styleguide>_`):
+`Google's Style Guide <https://github.com/google/styleguide>`_):
 
 .. code-block:: python
 
@@ -108,14 +108,14 @@ Testing
 -------
 
 To run all tests, execute ``test.sh``. These tests are checked are run by
-`Travis CI <https://travis-ci.com>_` on all pull requests and the master branch.
+`Travis CI <https://travis-ci.com>`_ on all pull requests and the master branch.
 Before each commit, run ``test.sh`` and ensure that all tests pass. All tests
 should pass on each commit to make reverting easy.
 
 Unit Testing
 ************
 
-Unit testing is performed using `pytest <https://pytest.org/>_`. To run these
+Unit testing is performed using `pytest <https://pytest.org/>`_. To run these
 tests, execute ``python -m pytest`` from the repository root.
 
 Code and Style Analysis
@@ -138,12 +138,12 @@ Code Coverage
 *************
 
 When running the test suite using ``test.sh``, code coverage is computed by
-`pytest-cov <https://pytest-cov.readthedocs.io/en/latest/>` when running
+`pytest-cov <https://pytest-cov.readthedocs.io/en/latest/>`_ when running
 ``pytest`` and output after test results. Use these results to ensure that all
 tests are being covered. If the total coverage is not ``100%``, run
 ``coverage report -m`` to see which lines were not tested. Incomplete coverage
 may be acceptable if the untested lines should not have been tested (e.g. code
 stubs for un-implemented functions).
 
-Coverage is tracked by `Codecov <https://codecov.io>_`, which serves the badge
+Coverage is tracked by `Codecov <https://codecov.io>`_, which serves the badge
 at the top of this README.

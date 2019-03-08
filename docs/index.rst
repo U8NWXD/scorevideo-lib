@@ -18,10 +18,10 @@ Welcome to ``scorevideo_lib's`` documentation!
 ``scorevideo`` MATLAB program for scoring (annotating) animal behavior videos.
 This project is still very early in development, and many features remain to be
 implemented. Contributions are welcome! If you are interested in contributing,
-see the `documentation for contributors <contributing>_`.
+see the `documentation for contributors <contributing>`_.
 
 If you're just looking to get started with these tools, see the
-`getting started guide <getting-started>_`.
+`getting started guide <getting-started>`_.
 
 The code is hosted here: https://github.com/u8nwxd/scorevideo_lib
 
