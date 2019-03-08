@@ -53,6 +53,7 @@ MARKS_HEADER = [LONG_LINE,
                 "frame|time(min:sec)|mark name",
                 LONG_LINE]
 MARKS_START = "MARKS"
+EMPTY_STR_LIST = []  # type: List[str]
 
 
 class Log(BaseOps):
@@ -470,7 +471,7 @@ class RawLog(BaseOps):
         lines.append("")
 
         sections = [
-            (VIDEO_INFO_START, [], self.video_info, None, None),
+            (VIDEO_INFO_START, EMPTY_STR_LIST, self.video_info, None, None),
             (COMMANDS_START, COMMANDS_HEADER, self.commands, SHORT_LINE,
              POST_COMMANDS_TEXT),
             (RAW_START, RAW_HEADER, self.raw, LONG_LINE, None),
