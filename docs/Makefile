@@ -14,10 +14,12 @@ help:
 
 .PHONY: help Makefile
 
-#apidoc:
-#    @sphinx-apidoc -fo "$(SOURCEDIR)" "../$(SPHINXPROJ)"
+# Run sphinx-apidoc to generate the API documentation skeleton files
+apidoc:
+	@sphinx-apidoc -fo "$(SOURCEDIR)" "../$(SPHINXPROJ)"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
+# Note that apidoc is a dependency, so the api skeleton gets auto-created
+%: Makefile apidoc
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
