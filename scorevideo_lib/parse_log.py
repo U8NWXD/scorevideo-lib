@@ -136,6 +136,19 @@ class Log(BaseOps):
         self.marks.sort()
         self.full.sort()
 
+    def extend(self, log: "Log") -> None:
+        """Add each element of each section of a log to the current log.
+
+        Args:
+            log: Log to add elements from
+
+        Returns:
+            None
+
+        """
+        self.marks.extend(log.marks)
+        self.full.extend(log.full)
+
 
 class RawLog(BaseOps):
     """Store an interpreted form of a log file and perform operations on it

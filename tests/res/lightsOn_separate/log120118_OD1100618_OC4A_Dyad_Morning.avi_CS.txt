@@ -1,0 +1,80 @@
+scorevideo LOG
+File:  log1.wmv_CS.mat
+
+VIDEO FILE SET
+Videotype:  WMV
+Directory:  F:\TEMPORARY_Beau_DyadAssaysDamselfish\toScore\
+Video file set:
+   1 1-54001
+Play duration (min):  30.001
+Frames/sec of files:  30
+No. of subjects:  2
+
+COMMAND SET AND SETTINGS
+-------------------------------
+start|stop|subject|description
+-------------------------------
+A             0      Lead Swim at female
+C             0      Chase female
+D             0      Lateral display at female
+F             0      Flee from female
+N      G      0      Spawning
+Q             0      Quiver at female 
+R             0      Rostral display at female
+S             0      Bite female
+a             0      Lead swim at male
+b             0      Lead swim at ambigous
+c             0      chase male
+d             0      Lateral display at male
+e             0      Pot entry
+f             0      Flee from male
+l             0      Male follows male into pot
+m             0      Lateral display at ambiguous
+p             0      Dig
+q             0      Quiver at male
+r             0      Rostral display at male
+s             0      Bite male
+t             0      Victim of male biting
+x             0      Pot entry exit
+z             0      Quiver at ambigous
+y             0      Yawn
+-------------------------------
+subject 1:  subject1
+subject 2:  subject2
+subj#:  0=either  1=subject1  2=subject2  3=both
+No. of simultaneous behaviors:  one
+
+RAW LOG
+------------------------------------------
+frame|time(min:sec)|command
+------------------------------------------
+------------------------------------------
+
+FULL LOG
+------------------------------------------
+frame|time(min:sec)|description|action|subject
+------------------------------------------
+------------------------------------------
+
+NOTES
+------------------------------------------
+At 1:17:17 FM twitches unusually near SF as he swims into pot.
+At 4:21.87 FM, while in pot, suddenly flips around
+At 9:31.67, FM chases SM. During FM's approach, he seems to quiver. I'm not sure what this is called.
+By 12:13.23, SM has lost eye-bar
+At 12:11.57, FM chases SM. During FM's approach, he seems to quiver. I'm not sure what this is called.
+At 12:22.37, FM swims into pot and quivers while inside. Not sure what this is called, as it lacks the abrupt turn of a lead swim and there is no obvious target.
+At 13:01.03 FM backs up and tilts body in an unusual motion. Not sure what this is called.
+At 14:04.87, FM tilts body and quivers, but the body seems straight so it doesn't seem like a quiver. Not sure what this is.
+At 14:38.23, SM eye-bar is back
+At 16:03.87 FM performs strange "flick" with body near the pot. Atheer suggests these kinds of motions I have been seeing might be fish rubbing against things, like scratching?
+I am uncertain of the lead swim noted at 16:18.90
+------------------------------------------
+
+MARKS
+------------------------------------------
+frame|time(min:sec)|mark name
+------------------------------------------
+    1     0:00.03    video start
+54001    30:00.03    video end
+------------------------------------------

@@ -1,0 +1,360 @@
+scorevideo LOG
+File:  log1.wmv_CS.mat
+
+VIDEO FILE SET
+Videotype:  WMV
+Directory:  F:\TEMPORARY_Beau_DyadAssaysDamselfish\toScore\
+Video file set:
+   1 1-54001
+Play duration (min):  30.001
+Frames/sec of files:  30
+No. of subjects:  2
+
+COMMAND SET AND SETTINGS
+-------------------------------
+start|stop|subject|description
+-------------------------------
+A             0      Lead Swim at female
+C             0      Chase female
+D             0      Lateral display at female
+F             0      Flee from female
+N      G      0      Spawning
+Q             0      Quiver at female 
+R             0      Rostral display at female
+S             0      Bite female
+a             0      Lead swim at male
+b             0      Lead swim at ambigous
+c             0      chase male
+d             0      Lateral display at male
+e             0      Pot entry
+f             0      Flee from male
+l             0      Male follows male into pot
+m             0      Lateral display at ambiguous
+p             0      Dig
+q             0      Quiver at male
+r             0      Rostral display at male
+s             0      Bite male
+t             0      Victim of male biting
+x             0      Pot entry exit
+z             0      Quiver at ambigous
+y             0      Yawn
+-------------------------------
+subject 1:  subject1
+subject 2:  subject2
+subj#:  0=either  1=subject1  2=subject2  3=both
+No. of simultaneous behaviors:  one
+
+RAW LOG
+------------------------------------------
+frame|time(min:sec)|command
+------------------------------------------
+  171      0:05.70     x
+  180      0:06.00     C
+  564      0:18.80     C
+  702      0:23.40     c
+ 1271      0:42.37     e
+ 1331      0:44.37     x
+ 1331      0:44.37     c
+ 1399      0:46.63     C
+ 1805      1:00.17     c
+ 2037      1:07.90     e
+ 2058      1:08.60     x
+ 2065      1:08.83     c
+ 2355      1:18.50     e
+ 2652      1:28.40     x
+ 2673      1:29.10     c
+ 2725      1:30.83     C
+ 2730      1:31.00     S
+ 3212      1:47.07     C
+ 3220      1:47.33     S
+ 3274      1:49.13     C
+ 4276      2:22.53     C
+ 4335      2:24.50     C
+ 5269      2:55.63     C
+ 5380      2:59.33     C
+ 6286      3:29.53     c
+ 7366      4:05.53     e
+10768      5:58.93     x
+10771      5:59.03     C
+10875      6:02.50     s
+10902      6:03.40     d
+11390      6:19.67     c
+11858      6:35.27     e
+12975      7:12.50     x
+12976      7:12.53     C
+13118      7:17.27     C
+13532      7:31.07     C
+13579      7:32.63     c
+13624      7:34.13     d
+13637      7:34.57     d
+13648      7:34.93     c
+13693      7:36.43     C
+13751      7:38.37     C
+14433      8:01.10     e
+14789      8:12.97     x
+15418      8:33.93     c
+15862      8:48.73     c
+16263      9:02.10     C
+16757      9:18.57     c
+17151      9:31.70     c
+17748      9:51.60     C
+18626     10:20.87     e
+18655     10:21.83     x
+18659     10:21.97     c
+19386     10:46.20     C
+19671     10:55.70     c
+20401     11:20.03     e
+20626     11:27.53     c
+20630     11:27.67     x
+21879     12:09.30     c
+21947     12:11.57     c
+22171     12:19.03     e
+22258     12:21.93     Q
+22642     12:34.73     x
+22676     12:35.87     C
+22754     12:38.47     C
+23927     13:17.57     C
+24038     13:21.27     c
+25643     14:14.77     e
+25674     14:15.80     x
+25678     14:15.93     C
+25742     14:18.07     c
+26372     14:39.07     C
+27903     15:30.10     c
+28412     15:47.07     c
+28803     16:00.10     c
+29206     16:13.53     c
+29367     16:18.90     b
+29427     16:20.90     e
+29434     16:21.13     C
+29446     16:21.53     x
+29566     16:25.53     C
+29594     16:26.47     c
+29768     16:32.27     c
+30397     16:53.23     e
+31005     17:13.50     p
+31391     17:26.37     x
+31405     17:26.83     C
+31448     17:28.27     c
+32417     18:00.57     c
+33231     18:27.70     c
+33958     18:51.93     C
+34275     19:02.50     e
+34803     19:20.10     x
+34805     19:20.17     y
+35102     19:30.07     C
+36018     20:00.60     C
+36189     20:06.30     c
+36245     20:08.17     C
+37327     20:44.23     c
+38656     21:28.53     c
+39019     21:40.63     C
+40334     22:24.47     c
+41033     22:47.77     e
+41773     23:12.43     x
+41802     23:13.40     c
+42117     23:23.90     C
+42623     23:40.77     e
+43045     23:54.83     x
+43055     23:55.17     c
+43071     23:55.70     C
+43308     24:03.60     e
+43651     24:15.03     x
+45415     25:13.83     e
+45598     25:19.93     c
+45606     25:20.20     x
+46147     25:38.23     c
+46745     25:58.17     e
+47407     26:20.23     c
+47415     26:20.50     x
+47940     26:38.00     c
+48041     26:41.37     C
+48584     26:59.47     c
+48680     27:02.67     c
+48992     27:13.07     e
+49102     27:16.73     x
+49274     27:22.47     C
+49788     27:39.60     C
+50683     28:09.43     p
+51091     28:23.03     c
+51136     28:24.53     C
+51171     28:25.70     C
+51683     28:42.77     c
+51694     28:43.13     C
+51867     28:48.90     C
+51914     28:50.47     C
+52207     29:00.23     c
+52941     29:24.70     c
+53402     29:40.07     c
+53639     29:47.97     C
+53946     29:58.20     C
+------------------------------------------
+
+FULL LOG
+------------------------------------------
+frame|time(min:sec)|description|action|subject
+------------------------------------------
+  171     0:05.70    Pot entry exit             either
+  180     0:06.00    Chase female               either
+  564     0:18.80    Chase female               either
+  702     0:23.40    chase male                 either
+ 1271     0:42.37    Pot entry                  either
+ 1331     0:44.37    Pot entry exit             either
+ 1331     0:44.37    chase male                 either
+ 1399     0:46.63    Chase female               either
+ 1805     1:00.17    chase male                 either
+ 2037     1:07.90    Pot entry                  either
+ 2058     1:08.60    Pot entry exit             either
+ 2065     1:08.83    chase male                 either
+ 2355     1:18.50    Pot entry                  either
+ 2652     1:28.40    Pot entry exit             either
+ 2673     1:29.10    chase male                 either
+ 2725     1:30.83    Chase female               either
+ 2730     1:31.00    Bite female                either
+ 3212     1:47.07    Chase female               either
+ 3220     1:47.33    Bite female                either
+ 3274     1:49.13    Chase female               either
+ 4276     2:22.53    Chase female               either
+ 4335     2:24.50    Chase female               either
+ 5269     2:55.63    Chase female               either
+ 5380     2:59.33    Chase female               either
+ 6286     3:29.53    chase male                 either
+ 7366     4:05.53    Pot entry                  either
+10768     5:58.93    Pot entry exit             either
+10771     5:59.03    Chase female               either
+10875     6:02.50    Bite male                  either
+10902     6:03.40    Lateral display at male    either
+11390     6:19.67    chase male                 either
+11858     6:35.27    Pot entry                  either
+12975     7:12.50    Pot entry exit             either
+12976     7:12.53    Chase female               either
+13118     7:17.27    Chase female               either
+13532     7:31.07    Chase female               either
+13579     7:32.63    chase male                 either
+13624     7:34.13    Lateral display at male    either
+13637     7:34.57    Lateral display at male    either
+13648     7:34.93    chase male                 either
+13693     7:36.43    Chase female               either
+13751     7:38.37    Chase female               either
+14433     8:01.10    Pot entry                  either
+14789     8:12.97    Pot entry exit             either
+15418     8:33.93    chase male                 either
+15862     8:48.73    chase male                 either
+16263     9:02.10    Chase female               either
+16757     9:18.57    chase male                 either
+17151     9:31.70    chase male                 either
+17748     9:51.60    Chase female               either
+18626    10:20.87    Pot entry                  either
+18655    10:21.83    Pot entry exit             either
+18659    10:21.97    chase male                 either
+19386    10:46.20    Chase female               either
+19671    10:55.70    chase male                 either
+20401    11:20.03    Pot entry                  either
+20626    11:27.53    chase male                 either
+20630    11:27.67    Pot entry exit             either
+21879    12:09.30    chase male                 either
+21947    12:11.57    chase male                 either
+22171    12:19.03    Pot entry                  either
+22258    12:21.93    Quiver at female           either
+22642    12:34.73    Pot entry exit             either
+22676    12:35.87    Chase female               either
+22754    12:38.47    Chase female               either
+23927    13:17.57    Chase female               either
+24038    13:21.27    chase male                 either
+25643    14:14.77    Pot entry                  either
+25674    14:15.80    Pot entry exit             either
+25678    14:15.93    Chase female               either
+25742    14:18.07    chase male                 either
+26372    14:39.07    Chase female               either
+27903    15:30.10    chase male                 either
+28412    15:47.07    chase male                 either
+28803    16:00.10    chase male                 either
+29206    16:13.53    chase male                 either
+29367    16:18.90    Lead swim at ambigous      either
+29427    16:20.90    Pot entry                  either
+29434    16:21.13    Chase female               either
+29446    16:21.53    Pot entry exit             either
+29566    16:25.53    Chase female               either
+29594    16:26.47    chase male                 either
+29768    16:32.27    chase male                 either
+30397    16:53.23    Pot entry                  either
+31005    17:13.50    Dig                        either
+31391    17:26.37    Pot entry exit             either
+31405    17:26.83    Chase female               either
+31448    17:28.27    chase male                 either
+32417    18:00.57    chase male                 either
+33231    18:27.70    chase male                 either
+33958    18:51.93    Chase female               either
+34275    19:02.50    Pot entry                  either
+34803    19:20.10    Pot entry exit             either
+34805    19:20.17    Yawn                       either
+35102    19:30.07    Chase female               either
+36018    20:00.60    Chase female               either
+36189    20:06.30    chase male                 either
+36245    20:08.17    Chase female               either
+37327    20:44.23    chase male                 either
+38656    21:28.53    chase male                 either
+39019    21:40.63    Chase female               either
+40334    22:24.47    chase male                 either
+41033    22:47.77    Pot entry                  either
+41773    23:12.43    Pot entry exit             either
+41802    23:13.40    chase male                 either
+42117    23:23.90    Chase female               either
+42623    23:40.77    Pot entry                  either
+43045    23:54.83    Pot entry exit             either
+43055    23:55.17    chase male                 either
+43071    23:55.70    Chase female               either
+43308    24:03.60    Pot entry                  either
+43651    24:15.03    Pot entry exit             either
+45415    25:13.83    Pot entry                  either
+45598    25:19.93    chase male                 either
+45606    25:20.20    Pot entry exit             either
+46147    25:38.23    chase male                 either
+46745    25:58.17    Pot entry                  either
+47407    26:20.23    chase male                 either
+47415    26:20.50    Pot entry exit             either
+47940    26:38.00    chase male                 either
+48041    26:41.37    Chase female               either
+48584    26:59.47    chase male                 either
+48680    27:02.67    chase male                 either
+48992    27:13.07    Pot entry                  either
+49102    27:16.73    Pot entry exit             either
+49274    27:22.47    Chase female               either
+49788    27:39.60    Chase female               either
+50683    28:09.43    Dig                        either
+51091    28:23.03    chase male                 either
+51136    28:24.53    Chase female               either
+51171    28:25.70    Chase female               either
+51683    28:42.77    chase male                 either
+51694    28:43.13    Chase female               either
+51867    28:48.90    Chase female               either
+51914    28:50.47    Chase female               either
+52207    29:00.23    chase male                 either
+52941    29:24.70    chase male                 either
+53402    29:40.07    chase male                 either
+53639    29:47.97    Chase female               either
+53946    29:58.20    Chase female               either
+------------------------------------------
+
+NOTES
+------------------------------------------
+At 1:17:17 FM twitches unusually near SF as he swims into pot.
+At 4:21.87 FM, while in pot, suddenly flips around
+At 9:31.67, FM chases SM. During FM's approach, he seems to quiver. I'm not sure what this is called.
+By 12:13.23, SM has lost eye-bar
+At 12:11.57, FM chases SM. During FM's approach, he seems to quiver. I'm not sure what this is called.
+At 12:22.37, FM swims into pot and quivers while inside. Not sure what this is called, as it lacks the abrupt turn of a lead swim and there is no obvious target.
+At 13:01.03 FM backs up and tilts body in an unusual motion. Not sure what this is called.
+At 14:04.87, FM tilts body and quivers, but the body seems straight so it doesn't seem like a quiver. Not sure what this is.
+At 14:38.23, SM eye-bar is back
+At 16:03.87 FM performs strange "flick" with body near the pot. Atheer suggests these kinds of motions I have been seeing might be fish rubbing against things, like scratching?
+I am uncertain of the lead swim noted at 16:18.90
+------------------------------------------
+
+MARKS
+------------------------------------------
+frame|time(min:sec)|mark name
+------------------------------------------
+    1     0:00.03    video start
+54001    30:00.03    video end
+------------------------------------------

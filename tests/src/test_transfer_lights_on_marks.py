@@ -26,6 +26,15 @@ def temp_test_dir():
     rmtree(dst)
 
 
+@fixture
+def temp_test_dir_sep():
+    src = os.path.join(TEST_RES, "lightsOn_separate")
+    dst = os.path.join(TEST_RES, "tmp")
+    copytree(src, dst)
+    yield src, dst
+    rmtree(dst)
+
+
 def lights_on_test_helper(temp_test_dir, scored_name, expected_mark):
     src, dst = temp_test_dir
     batch_mark_lights_on(dst)
@@ -59,3 +68,28 @@ def test_mark_lights_on_empty_1st_neg_behav(temp_test_dir):
     scored_name = "log050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt"
     expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
     lights_on_test_helper(temp_test_dir, scored_name, expected_mark)
+
+
+def test_mark_lights_on_sep(temp_test_dir_sep):
+    scored_name = "log050118_OD1030618_TA23_Dyad_Morning.avi_CS.txt"
+    expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
+    lights_on_test_helper(temp_test_dir_sep, scored_name, expected_mark)
+
+
+def test_mark_lights_on_no_behav_1st_sep(temp_test_dir_sep):
+    scored_name = "log120118_OD1030618_OC4A_Dyad_Morning.avi_CS.txt"
+    expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
+    lights_on_test_helper(temp_test_dir_sep, scored_name, expected_mark)
+
+
+def test_mark_lights_on_no_behav_scored_sep(temp_test_dir_sep):
+    scored_name = "log120118_OD1100618_OC4A_Dyad_Morning.avi_CS.txt"
+    expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
+    lights_on_test_helper(temp_test_dir_sep, scored_name, expected_mark)
+
+
+def test_mark_lights_on_empty_1st_neg_behav_sep(temp_test_dir_sep):
+    scored_name = "log050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt"
+    expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
+    lights_on_test_helper(temp_test_dir_sep, scored_name, expected_mark)
+

@@ -162,6 +162,32 @@ def is_scored(filename: str) -> bool:
     return last_elem in ("Morning", "Afternoon")
 
 
+def is_lights_on(filename: str) -> bool:
+    """Check whether a filename is for a lights-on log
+
+    A lights-on log has the same name as another log, but ends with
+    ``_LIGHTSON``. This signals that the ``LIGHTS ON`` behavior in the
+    lights-on log should be transferred, maintaining timestamp and frame number,
+    to the log of the same name (minus ``_LIGHTSON``, and perhaps different
+    scoring initials). Note that the terminal file extension (e.g. ``.txt``) is
+    ignored.
+
+    >>> is_lights_on("log050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt")
+    False
+    >>> is_lights_on("log050118_OB5B030618_TA23_Dyad_1.avi_CS_LIGHTSON.txt")
+    True
+
+    Args:
+        filename: Name of log file to check
+
+    Returns:
+        Whether the file is a lights-on log
+    """
+    filename, _ = os.path.splitext(filename)
+    terminal = filename.split('_')[-1]
+    return terminal == "LIGHTSON"
+
+
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
 
@@ -169,12 +195,17 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
     logs that pertain to the same fish on the same day. A ``LIGHTS ON`` behavior
     in one of the aggression logs is transferred to the full scoring log,
     accounting for the change in reference point for frame numbers and times.
+    The ``LIGHTS ON`` behavior can instead be specified in a separate lights-on
+    log (see :py:func:`is_lights_on`). This log should have the same name as the
+    log in which the ``LIGHTS ON`` behavior would otherwise be (before being
+    transferred), except its name (before the terminal extension like ``.txt``)
+    should end in ``_LIGHTSON`` and the initials of the scorer may differ.
 
     Args:
         path_to_log_dir: Path to the directory of logs to process
 
     Returns:
-
+        None
     """
     files = [x for x in os.listdir(path_to_log_dir) if x[0] != '.']
     form = r"\Alog[0-9]{6}_[0-9A-Z]+[0-9]{6}_[0-9A-Z]+_Dyad_[0-9A-Za-z]+.*\Z"
@@ -185,18 +216,33 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
 
     for partition in partitions:
         scored = None
+        lightson = None
         for filename in partition:
             if is_scored(filename):
                 assert scored is None
                 scored = filename
+            if is_lights_on(filename):
+                assert lightson is None
+                lightson = filename
         assert scored is not None
+        if lightson:
+            assert lightson != scored
 
-        log_names = [name for name in partition if name != scored]
+            with open(lightson, 'r') as f:
+                lightson_log = Log.from_file(f)
+
+        log_names = [name for name in partition
+                     if name not in (scored, lightson)]
         log_names = sorted(log_names, key=lambda x: int(get_last_name_elem(x)))
+        print(log_names)
         logs = []
         for name in log_names:
             with open(name, 'r') as f:
-                logs.append(Log.from_file(f))
+                log = Log.from_file(f)
+                if lightson and get_last_name_elem(name) == \
+                        get_last_name_elem(lightson):
+                    log.extend(lightson_log)
+                logs.append(log)
         with open(scored, 'r') as f:
             scored_raw = RawLog.from_file(f)
             final = copy_lights_on(logs, scored_raw, read_aggr_behav_list())
