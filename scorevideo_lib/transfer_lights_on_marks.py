@@ -187,7 +187,7 @@ def is_lights_on(filename: str) -> bool:
     terminal = filename.split('_')[-1]
     return terminal == "LIGHTSON"
 
-
+# pylint: disable=too-many-locals
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
 
