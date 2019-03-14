@@ -211,6 +211,39 @@ def normalize_name(filename: str) -> str:
     return "log" + filename
 
 
+def name_filter(filename: str) -> bool:
+    """Filter for filenames that should be included for processing
+
+    Includes the numbered log files, and the ``Morning`` log files. Excludes the
+    ``Afternoon`` log files.
+
+    >>> name_filter("log050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt")
+    True
+    >>> name_filter("log050118_OB5B030618_TA23_Dyad_Afternoon.avi_CS.txt")
+    False
+    >>> name_filter("log050118_OB5B030618_TA23_Dyad_3.avi_CS.txt")
+    True
+
+    The ``log`` prefix is ignored
+
+    >>> name_filter("050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt")
+    True
+    >>> name_filter("050118_OB5B030618_TA23_Dyad_Afternoon.avi_CS.txt")
+    False
+    >>> name_filter("050118_OB5B030618_TA23_Dyad_3.avi_CS.txt")
+    True
+
+    Args:
+        filename: The filename to check
+
+    Returns:
+        Whether the file should be included for analysis
+    """
+    form = r"\Alog[0-9]{6}_[0-9A-Z]+[0-9]{6}_[0-9A-Z]+_Dyad_([0-9]+|(Morning)).*\Z"
+    filename = normalize_name(filename)
+    return re.fullmatch(form, filename) is not None
+
+
 # pylint: disable=too-many-locals
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
@@ -232,9 +265,8 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
         None
     """
     files = [x for x in os.listdir(path_to_log_dir) if x[0] != '.']
-    form = r"\Alog[0-9]{6}_[0-9A-Z]+[0-9]{6}_[0-9A-Z]+_Dyad_[0-9A-Za-z]+.*\Z"
     files = [os.path.join(path_to_log_dir, x) for x in files
-             if re.fullmatch(form, normalize_name(x)) is not None]
+             if name_filter(x)]
 
     partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
 
