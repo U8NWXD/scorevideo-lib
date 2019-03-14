@@ -138,6 +138,8 @@ def same_fish_and_day(name1: str, name2: str) -> bool:
     Returns: Whether the names share a core
 
     """
+    name1 = normalize_name(name1)
+    name2 = normalize_name(name2)
     return get_name_core(name1) == get_name_core(name2)
 
 
@@ -187,6 +189,28 @@ def is_lights_on(filename: str) -> bool:
     terminal = filename.split('_')[-1]
     return terminal == "LIGHTSON"
 
+
+def normalize_name(filename: str) -> str:
+    """Normalize a filename by adding a prefix ``log`` if not already present
+
+    >>> normalize_name("1.wmv_CS.txt")
+    'log1.wmv_CS.txt'
+    >>> normalize_name("log1.wmv_CS.txt")
+    'log1.wmv_CS.txt'
+    >>> normalize_name("logfoo")
+    'logfoo'
+
+    Args:
+        filename: The filename to normalize
+
+    Returns:
+        The normalized filename.
+    """
+    if len(filename) >= 3 and filename[:3] == "log":
+        return filename
+    return "log" + filename
+
+
 # pylint: disable=too-many-locals
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
@@ -210,7 +234,7 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
     files = [x for x in os.listdir(path_to_log_dir) if x[0] != '.']
     form = r"\Alog[0-9]{6}_[0-9A-Z]+[0-9]{6}_[0-9A-Z]+_Dyad_[0-9A-Za-z]+.*\Z"
     files = [os.path.join(path_to_log_dir, x) for x in files
-             if re.fullmatch(form, x) is not None]
+             if re.fullmatch(form, normalize_name(x)) is not None]
 
     partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
 
@@ -253,4 +277,4 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    batch_mark_lights_on(".")
+    batch_mark_lights_on("work")
