@@ -92,3 +92,8 @@ def test_mark_lights_on_empty_1st_neg_behav_sep(temp_test_dir_sep):
     scored_name = "log050118_OB5B030618_TA23_Dyad_Morning.avi_CS.txt"
     expected_mark = "-72820   -40:27.33    LIGHTS ON\n"
     lights_on_test_helper(temp_test_dir_sep, scored_name, expected_mark)
+
+# TODO: Add test with names:
+# ['work/051518_OA5030618_OC4B_Dyad_Morning.wmv_CS.txt',
+# 'work/log051518_OA5030618_OC4B_Dyad_1.avi_CS.txt',
+# 'work/log051518_OA5030618_OC4B_Dyad_1.avi_CS_LIGHTSON.txt']
