@@ -20,11 +20,91 @@ WARNING: This script is NOT general. It is specific to one particular
 
 import os
 import re
-from typing import List
+from typing import List, Tuple, Optional
 from scorevideo_lib.parse_log import Log, RawLog
 from scorevideo_lib.add_marks import copy_mark, get_ending_mark, \
     get_ending_behav
 from scorevideo_lib.base_utils import equiv_partition
+
+
+class ExpectedFile:
+    """Describes the characteristics of a file name for matching
+
+    This is used in :py:const:`PART_REQUIRED` and
+    :py:const:`PART_OPTIONAL` to describe required and allowed files.
+    """
+
+    def __init__(self, present: List[str] = None, absent: List[str] = None,
+                 regex: str = None) -> None:
+        """Create a new file description
+
+        Args:
+            present: Substrings expected to be present in the file name
+            absent: Substrings expected to be absent in the file name
+            regex: Regular expression expected to match the file name
+        """
+        if present:
+            self.present = present
+        else:
+            self.present = []
+
+        if absent:
+            self.absent = absent
+        else:
+            self.absent = []
+        self.regex = regex
+
+    def match(self, to_test: str) -> bool:
+        """Checks whether a file name matches this description.
+
+        A file matches if it satisfies every specified instance field. For
+        example:
+        >>> ExpectedFile(['a', 'b'], ['c']).match('ab')
+        True
+        >>> ExpectedFile(['a', 'b'], ['c']).match('abc')
+        False
+        >>> ExpectedFile(['a', 'b'], ['c']).match('ac')
+        False
+        >>> ExpectedFile(['a', 'b'], ['c']).match('a')
+        False
+        >>> ExpectedFile(['a', 'b'], ['c'], r'[abc]*.txt').match('ab')
+        False
+        >>> ExpectedFile(['a', 'b'], ['c'], r'[abc]*.txt').match('ab.txt')
+        True
+        >>> ExpectedFile(['a', 'b'], ['c'], r'[abc]*.txt').match('abc.txt')
+        False
+
+        Args:
+            to_test: The string to check for matching
+
+        Returns:
+            ``True`` if and only if the file name matches.
+        """
+        for s in self.present:
+            if s not in to_test:
+                return False
+        for s in self.absent:
+            if s in to_test:
+                return False
+        if self.regex and re.fullmatch(self.regex, to_test) is None:
+            return False
+        return True
+
+    def __repr__(self) -> str:
+        return "ExpectedFile[present={}, absent={}, regex={}]".format(
+            self.present, self.absent, self.regex)
+
+    def __str__(self) -> str:
+        return repr(self)
+
+
+# Specify regular expressions that identify logs required for every partition
+PART_REQUIRED = [ExpectedFile(["_Morning."], ["_LIGHTSON.txt"]),
+                 ExpectedFile(["_1."], ["_LIGHTSON.txt"])]
+# Specify regular expressions that identify logs optional for every partition
+PART_OPTIONAL = [ExpectedFile(["_2."], ["_LIGHTSON.txt"]),
+                 ExpectedFile(["_LIGHTSON.txt"])]
+# Any files in partitions not matching any of the above throw errors
 
 
 def read_aggr_behav_list() -> List[str]:
@@ -80,6 +160,10 @@ def get_name_core(filename: str) -> str:
 
     >>> get_name_core("log050118_OB5B030618_TA23_Dyad_Morning.avi_CS")
     'log050118_OB5B030618_TA23_Dyad'
+    >>> get_name_core("log050118_OB5B030618_TA23_Dyad_1.avi_CS.txt")
+    'log050118_OB5B030618_TA23_Dyad'
+    >>> get_name_core("tmp/log050118_OB5B030618_TA23_Dyad_Morning.avi_CS")
+    'log050118_OB5B030618_TA23_Dyad'
 
     Args:
         filename: The filename from which to extract the core
@@ -127,7 +211,13 @@ def same_fish_and_day(name1: str, name2: str) -> bool:
     >>> same_fish_and_day("log050118_OB5B030618_TA23_Dyad_Morning.avi_CS", \
     "log050118_OB5B030618_TA23_Dyad_1.avi_CS")
     True
+    >>> same_fish_and_day("050118_OB5B030618_TA23_Dyad_Morning.avi_CS", \
+    "log050118_OB5B030618_TA23_Dyad_1.avi_CS")
+    True
     >>> same_fish_and_day("log050118_OB5B030618_TA25_Dyad_Morning.avi_CS", \
+    "log050118_OB5B030618_TA23_Dyad_1.avi_CS")
+    False
+    >>> same_fish_and_day("050118_OB5B030618_TA25_Dyad_Morning.avi_CS", \
     "log050118_OB5B030618_TA23_Dyad_1.avi_CS")
     False
 
@@ -138,6 +228,8 @@ def same_fish_and_day(name1: str, name2: str) -> bool:
     Returns: Whether the names share a core
 
     """
+    _, name1 = os.path.split(name1)
+    _, name2 = os.path.split(name2)
     name1 = normalize_name(name1)
     name2 = normalize_name(name2)
     return get_name_core(name1) == get_name_core(name2)
@@ -244,6 +336,95 @@ def name_filter(filename: str) -> bool:
     return re.fullmatch(form, filename) is not None
 
 
+def validate_partition(partition: List[str]) -> List[str]:
+    """Validates a partitioning of files
+
+    Ensures that no two files match an element of
+    :py:const:`PART_OPTIONAL`, and ensures that exactly one file matches
+    each element of :py:const:`PART_REQUIRED`. Also ensures that no files that
+    don't match any element of either are present.
+
+    Args:
+        partition: The list of file names to validate
+
+    Returns:
+        A list of problem descriptions, one for each problem discovered. No
+        problems are found if and only if ``[]`` is returned.
+    """
+
+    probs = []
+    required: List[List[str]] = [[] for _ in PART_REQUIRED]
+    optional: List[List[str]] = [[] for _ in PART_OPTIONAL]
+
+    for name in partition:
+        matched = []
+        for i, req in enumerate(PART_REQUIRED):
+            if req.match(name):
+                matched.append(PART_REQUIRED[i])
+                required[i].append(name)
+        for i, opt in enumerate(PART_OPTIONAL):
+            if opt.match(name):
+                matched.append(PART_OPTIONAL[i])
+                optional[i].append(name)
+        if len(matched) > 1:
+            probs.append("File {} matched multiple expectations: {}".
+                         format(name, matched))
+
+    for i, files in enumerate(required):
+        if not files:
+            probs.append("No file found that matches: {}".
+                         format(PART_REQUIRED[i]))
+        if len(files) > 1:
+            probs.append("{} matched multiple files: {}".format(
+                PART_REQUIRED[i], files))
+    for i, files in enumerate(optional):
+        if len(files) > 1:
+            probs.append("{} matched multiple files: {}".format(
+                PART_REQUIRED[i], files))
+    return probs
+
+
+def find_scored_lights(partition: List[str]) -> \
+        Tuple[str, Optional[str]]:
+    """Find the full scoring and lights-on log of a partition
+
+    Full scoring logs are identified by :py:func:`is_scored`, and lights-on
+    logs are identified by :py:func:`is_lights_on`.
+
+    Args:
+        partition: The list of file names from which to identify lights-on
+            and full scoring logs.
+
+    Returns:
+        Tuple of file names of full scoring log and lights-on log. If no lights
+        on log is found, ``None`` is returned instead.
+
+    """
+    scored = None
+    lightson: Optional[str] = None
+
+    for filename in partition:
+        if is_scored(filename):
+            if scored is not None:
+                msg = "Duplicate full scoring log: {}".format(scored)
+                raise ValueError(msg)
+            scored = filename
+        if is_lights_on(filename):
+            if lightson is not None:
+                msg = "Duplicate lights-on log: {}".format(lightson)
+                raise ValueError(msg)
+            lightson = filename
+    if scored is None:
+        msg = "No full scoring log found for {}".format(partition)
+        raise ValueError(msg)
+    if lightson:
+        if lightson == scored:
+            msg = "Lights-on log {} same as the full scoring log {}".format(
+                lightson, scored)
+            raise ValueError(msg)
+    return scored, lightson
+
+
 # pylint: disable=too-many-locals
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
@@ -270,27 +451,28 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
 
     partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
 
+    probs = False
     for partition in partitions:
-        scored = None
-        lightson = None
-        for filename in partition:
-            if is_scored(filename):
-                assert scored is None
-                scored = filename
-            if is_lights_on(filename):
-                assert lightson is None
-                lightson = filename
-        assert scored is not None
-        if lightson:
-            assert lightson != scored
+        part_probs = validate_partition(partition)
+        if part_probs:
+            probs = True
+            print("Problems with partition: {}".format(partition))
+            for prob in part_probs:
+                print("\t{}".format(prob))
+    if probs:
+        raise ValueError("Some partitions are invalid.")
 
+    for partition in partitions:
+        scored, lightson = find_scored_lights(partition)
+
+        if lightson:
             with open(lightson, 'r') as f:
                 lightson_log = Log.from_file(f)
 
         log_names = [name for name in partition
                      if name not in (scored, lightson)]
         log_names = sorted(log_names, key=lambda x: int(get_last_name_elem(x)))
-        print(log_names)
+
         logs = []
         for name in log_names:
             with open(name, 'r') as f:
