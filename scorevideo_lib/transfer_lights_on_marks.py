@@ -399,6 +399,10 @@ def find_scored_lights(partition: List[str]) -> \
         Tuple of file names of full scoring log and lights-on log. If no lights
         on log is found, ``None`` is returned instead.
 
+    Raises:
+        ValueError: If duplicate full scoring logs or lights-on logs are found,
+            if no full scoring log is found, or if the scoring log is the same
+            as the lights-on log.
     """
     scored = None
     lightson: Optional[str] = None
@@ -425,7 +429,45 @@ def find_scored_lights(partition: List[str]) -> \
     return scored, lightson
 
 
-# pylint: disable=too-many-locals
+def get_partitions(path_to_log_dir: str):
+    """Get partitioned file names from the specified directory
+
+    Files beginning with ``.`` are filtered out, as are any files for which
+    :py:func:`name_filter` returns ``False``. Names are partitioned using
+    :py:func:`equiv_partition`, where equivalence is determined by
+    :py:func:`same_fish_and_day` returning ``True``. Each name includes
+    the provided path as a prefix. Partitions are validated using
+    :py:func:`validate_partition`.
+
+    Args:
+        path_to_log_dir: Path to the directory containing log files to partition
+
+    Returns:
+        A valid partitioning of the file names.
+
+    Raises:
+        ValueError: If any of the partitions fail validation
+    """
+    files = [x for x in os.listdir(path_to_log_dir) if x[0] != '.']
+    files = [os.path.join(path_to_log_dir, x) for x in files
+             if name_filter(x)]
+
+    partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
+
+    probs = False
+    for partition in partitions:
+        part_probs = validate_partition(partition)
+        if part_probs:
+            probs = True
+            print("Problems with partition: {}".format(partition))
+            for prob in part_probs:
+                print("\t{}".format(prob))
+    if probs:
+        raise ValueError("Some partitions are invalid.")
+
+    return partitions
+
+
 def batch_mark_lights_on(path_to_log_dir: str) -> None:
     """Transfer ``LIGHTS ON`` marks en masse for all logs in a directory
 
@@ -445,23 +487,7 @@ def batch_mark_lights_on(path_to_log_dir: str) -> None:
     Returns:
         None
     """
-    files = [x for x in os.listdir(path_to_log_dir) if x[0] != '.']
-    files = [os.path.join(path_to_log_dir, x) for x in files
-             if name_filter(x)]
-
-    partitions: List[List[str]] = equiv_partition(files, same_fish_and_day)
-
-    probs = False
-    for partition in partitions:
-        part_probs = validate_partition(partition)
-        if part_probs:
-            probs = True
-            print("Problems with partition: {}".format(partition))
-            for prob in part_probs:
-                print("\t{}".format(prob))
-    if probs:
-        raise ValueError("Some partitions are invalid.")
-
+    partitions = get_partitions(path_to_log_dir)
     for partition in partitions:
         scored, lightson = find_scored_lights(partition)
 
