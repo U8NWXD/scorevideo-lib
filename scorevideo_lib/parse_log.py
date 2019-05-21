@@ -804,6 +804,56 @@ class Mark(SectionItem):
 
         return cls(frame, time, name)
 
+    @staticmethod
+    def time_to_str(time: timedelta) -> str:
+        """Converts a :py:class:`timedelta` object into a string
+
+        >>> Mark.time_to_str(timedelta(seconds=1800.07))
+        '30:00.07'
+        >>> Mark.time_to_str(timedelta(seconds=4.4557))
+        '0:04.45'
+        >>> Mark.time_to_str(timedelta(seconds=3600.5))
+        '1:00:00.50'
+        >>> Mark.time_to_str(timedelta(seconds=-1800.07))
+        '-30:00.07'
+
+        Args:
+            time: The time to turn into a string.
+
+        Returns:
+            A string representation of the time, with 2 decimal-places of second
+            precision. The result is truncated if necessary.
+
+        Raises:
+            ValueError: Raised if time is greater than 1 day.
+        """
+        secs = datetime.utcfromtimestamp(abs(time.total_seconds()))
+        if abs(time) < timedelta(seconds=60):
+            # Under 1 minute (all can be expressed in secs microsecs)
+            time_str = "0:" + secs.strftime("%S.%f")
+        elif abs(time) < timedelta(seconds=60 * 60):
+            # Under 1 hour (all can be expressed in mins, secs, microsecs)
+            time_str = secs.strftime("%M:%S.%f")
+            if time_str[0] == "0":
+                time_str = time_str[1:]
+        elif abs(time) < timedelta(days=1):
+            # Under 1 day (all can be expressed in hrs, mins, secs, microsecs)
+            time_str = secs.strftime("%H:%M:%S.%f")
+            if time_str[0] == "0":
+                time_str = time_str[1:]
+        else:
+            raise ValueError("The duration '{}' is too long (must be < 1 day)"
+                             .format(str(time)))
+
+        # Truncate time_str to cut off all but 2 most significant decimal places
+        time_str = time_str[:time_str.index(".") + 3]
+
+        # Add negative sign for negative times
+        if time.total_seconds() < 0:
+            time_str = "-" + time_str
+
+        return time_str
+
     def to_line(self, other_line: str) -> str:
         """Converts a :py:class:Mark object into a log line in the MARKS section
 
@@ -828,7 +878,6 @@ class Mark(SectionItem):
         Raises:
             ValueError: Raised if ``other_line`` is invalid or the mark's time
                 is greater than 1 day
-
         """
         match = re.search(r"\A(\s*\S+)(\s{2,}\S+)(\s{2,})(?:\S+\s*)+",
                           other_line)
@@ -843,30 +892,7 @@ class Mark(SectionItem):
         time_col_width = len(match[2])
         time_name_sep_width = len(match[3])
 
-        time = datetime.utcfromtimestamp(abs(self.time.total_seconds()))
-        if abs(self.time) < timedelta(seconds=60):
-            # Under 1 minute (all can be expressed in secs microsecs)
-            time_str = "0:" + time.strftime("%S.%f")
-        elif abs(self.time) < timedelta(seconds=60 * 60):
-            # Under 1 hour (all can be expressed in mins, secs, microsecs)
-            time_str = time.strftime("%M:%S.%f")
-            if time_str[0] == "0":
-                time_str = time_str[1:]
-        elif abs(self.time) < timedelta(days=1):
-            # Under 1 day (all can be expressed in hrs, mins, secs, microsecs)
-            time_str = time.strftime("%H:%M:%S.%f")
-            if time_str[0] == "0":
-                time_str = time_str[1:]
-        else:
-            raise ValueError("The duration '{}' is too long (must be < 1 day)"
-                             .format(str(self.time)))
-
-        # Truncate time_str to cut off all but 2 most significant decimal places
-        time_str = time_str[:time_str.index(".") + 3]
-
-        # Add negative sign for negative times
-        if self.time.total_seconds() < 0:
-            time_str = "-" + time_str
+        time_str = Mark.time_to_str(self.time)
 
         # Creates a template like "{0:>frame_col_width}{1:>time_col_width}  {2}"
         # Both the frame and time columns are right-justified and of lengths
@@ -876,6 +902,31 @@ class Mark(SectionItem):
                    str(time_col_width) + "}" + (" " * time_name_sep_width) + \
                    "{2}"
         return template.format(self.frame, time_str, self.name)
+
+    def to_line_tab(self) -> str:
+        """Converts a :py:class:Mark object into a log line in the MARKS section
+
+        The resulting line is delimited by 4 spaces.
+
+        >>> mark = Mark(734, timedelta(seconds=1800.07), "video end")
+        >>> mark.to_line_tab()
+        '734    30:00.07    video end'
+
+        Returns:
+            A log line that could be inserted into the MARKS section of
+            the log from which ``other_line`` came. Note that since the line
+            has a fixed delimiter, this line may not appear to match the columns
+            in the file. However, this delimitation
+            is assumed by some other programs
+            for ``scorevideo`` logs, including ``behaviorcode``.
+
+        Raises:
+            ValueError: Raised if ``other_line`` is invalid or the mark's time
+                is greater than 1 day
+        """
+        time_str = Mark.time_to_str(self.time)
+        delim = '    '
+        return f"{self.frame}{delim}{time_str}{delim}{self.name}"
 
     def __lt__(self, other: "Mark"):
         """Determine if one :py:class:`Mark` is less than another
