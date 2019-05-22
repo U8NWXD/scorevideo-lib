@@ -1,14 +1,28 @@
+Lead Swim at female
 Chase female
+Lateral display at female
 Flee from female
+Bad quiver at female
+Bad lead swim at female
 Bad lateral display at female
+Spawning
+Quiver at female 
 Rostral display at female
 Bite female
+Victim of female biting
+Lead swim at male
+Lead swim at ambigous
 chase male
 Lateral display at male
 Flee from male
+Bad quiver at male
+Bad lead swim at male
 Bad lateral display at male
 Lateral display at ambiguous
 Chase ambiguous
 Bite ambiguous
+Quiver at male
 Rostral display at male
 Bite male
+Victim of male biting
+Quiver at ambigous
