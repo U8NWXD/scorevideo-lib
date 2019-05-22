@@ -32,7 +32,7 @@ def test_add_lights_on_mark_correct():
     with open(TEST_RES + "/realisticLogs/all.txt", "r") as file:
         expected = RawLog.from_file(file)
     new_mark = Mark(-frame_diff, -time_diff, dest_label)
-    expected.marks.append(new_mark.to_line(expected.marks[0]))
+    expected.marks.append(new_mark.to_line_tab())
 
     actual = copy_mark_disjoint([source, middle, middle], "Lights On",
                                 destination, dest_label)

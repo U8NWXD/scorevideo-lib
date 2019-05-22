@@ -89,7 +89,7 @@ def copy_mark(logs: List[Tuple[Log, timedelta, int]], src_pattern: str,
 
     new_mark = Mark(-frames, -time, dest_label)
     new_log = RawLog.from_raw_log(dest)
-    new_log.marks.append(new_mark.to_line(new_log.marks[0]))
+    new_log.marks.append(new_mark.to_line_tab())
     return new_log
 
 

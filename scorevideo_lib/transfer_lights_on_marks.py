@@ -106,6 +106,15 @@ PART_OPTIONAL = [ExpectedFile(["_2."], ["_LIGHTSON.txt"]),
                  ExpectedFile(["_LIGHTSON.txt"])]
 # Any files in partitions not matching any of the above throw errors
 
+# # Specify regular expressions that identify logs required for every partition
+# PART_REQUIRED = [ExpectedFile(["_Morning."], ["_LIGHTSON.txt"]),
+#                  ExpectedFile(["_1."], ["_LIGHTSON.txt"]),
+#                  ExpectedFile(["_LIGHTSON.txt"])]
+# # Specify regular expressions that identify logs optional for every partition
+# PART_OPTIONAL = [ExpectedFile(["_2."], ["_LIGHTSON.txt"]),
+#                  ]
+# # Any files in partitions not matching any of the above throw errors
+
 
 def read_aggr_behav_list() -> List[str]:
     """Read in the list of FM behaviors that are aggressive / submissive
