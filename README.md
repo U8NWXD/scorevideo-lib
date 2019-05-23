@@ -30,3 +30,6 @@ We have set forth our expectations for conduct on this project in
 
 ## Legal
 Use of this repository is governed by the license in [LICENSE.txt](LICENSE.txt)
+
+All changes made between April 4, 2019 and June 12, 2019 are dedicated to
+the public domain.
