@@ -567,10 +567,12 @@ class SectionItem(BaseOps):
         """Check whether ``desc`` is a valid behavior description
 
         To be valid, ``desc`` must be made exclusively of digits, letters,
-        and spaces.
+        commas, and spaces.
 
         >>> SectionItem.validate_description("Some Description 3!")
         False
+        >>> SectionItem.validate_description("Some Description, 3")
+        True
         >>> SectionItem.validate_description("Some Description 3")
         True
         >>> SectionItem.validate_description("Some Description 3 here")
@@ -584,7 +586,7 @@ class SectionItem(BaseOps):
         Returns: ``True`` if ``desc`` is valid, ``False`` otherwise
 
         """
-        return re.fullmatch(r"\A[0-9A-Za-z ]+\Z", desc) is not None
+        return re.fullmatch(r"\A[0-9A-Za-z ,]+\Z", desc) is not None
 
     @staticmethod
     def split_line(line: str) -> List[str]:
