@@ -155,7 +155,12 @@ def copy_lights_on(aggr_logs: List[Log], scored_log: RawLog,
     # For the last video, the next video starts at the first aggressive behavior
     # because only the pre-scoring videos should be in aggr_logs
     last_log = aggr_logs[-1]
-    s_behav = get_ending_behav(last_log.full, aggr_behav_des)
+    try:
+        s_behav = get_ending_behav(last_log.full, aggr_behav_des)
+    except ValueError as error:
+        msg = "No ending behavior in aggression logs {}: {}".format(aggr_logs,
+                                                                    error)
+        raise ValueError(msg)
     log_tuples.append((last_log, s_behav.time, s_behav.frame))
 
     return copy_mark(log_tuples, 'LIGHTS ON', scored_log, 'LIGHTS ON')
