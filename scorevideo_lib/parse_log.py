@@ -655,6 +655,7 @@ class BehaviorFull(SectionItem):
         description: The name of the behavior that appears as the second-to-last
             element in the provided line
         subject: Always the string ``either``
+        startend: Optional, either ``start`` or ``end``
     """
 
     def __init__(self, behavior_line: str) -> None:
@@ -669,6 +670,8 @@ class BehaviorFull(SectionItem):
         'Flee from male'
         >>> behav.subject
         'either'
+        >>> print(behav.startend)
+        None
 
         Args:
             behavior_line: A line from the ``FULL LOG`` section of a log file
@@ -676,14 +679,14 @@ class BehaviorFull(SectionItem):
             None
         Raises:
             TypeError: When the provided line does not conform to the
-                expected format. Notably, all 4 elements of the line must be
+                expected format. Notably, all the elements of the line must be
                 separated from each other by at least 2 spaces.
         """
         line = SectionItem.split_line(behavior_line)
         line_error = "The line '" + behavior_line + "' is not a valid line " \
                                                     "from the FULL LOG section"
-        if len(line) > 4:
-            err = "{} (num elements: {} > 4)".format(line_error, len(line))
+        if len(line) > 5:
+            err = "{} (num elements: {} > 5)".format(line_error, len(line))
             raise TypeError(err)
         elif len(line) < 4:
             err = "{} (num elements: {} < 4)".format(line_error, len(line))
@@ -707,6 +710,7 @@ class BehaviorFull(SectionItem):
         self.time = SectionItem.str_to_timedelta(line[1])
         self.description = line[2]
         self.subject = line[3]
+        self.startend = line[4] if len(line) == 5 else None
 
     @staticmethod
     def validate_subject(subject: str) -> bool:
