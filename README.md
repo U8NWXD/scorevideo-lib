@@ -6,13 +6,17 @@
 Library of utilities for working with the MATLAB program
 `scorevideo`.
 
+**WARNING: This repository is no longer maintained due to lack of use.
+If you are interested in using this software, please let me know. I may
+be able to start maintaining it again.**
+
 ## Introduction
 
 ``scorevideo_lib`` is a library of tools that makes it easier to work with the
 ``scorevideo`` MATLAB program for scoring (annotating) animal behavior videos.
 This project is still very early in development, and many features remain to be
 implemented. Contributions are welcome! If you are interested in contributing,
-see the 
+see the
 [documentation for contributors](https://scorevideo-lib.readthedocs.io/en/latest/contributing.html)
 
 If you're just looking to get started with these tools, see the
